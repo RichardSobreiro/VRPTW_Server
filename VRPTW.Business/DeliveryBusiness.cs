@@ -18,18 +18,19 @@ namespace VRPTW.Business
 
 		public DeliveryBusiness(IFractionedTripRepository _fractionedTripRepository, IGoogleMapsRepository _googleMapsRepository)
 		{
-			fractionedTripRepository = _fractionedTripRepository;
-			googleMapsRepository = _googleMapsRepository;
+			this._fractionedTripRepository = _fractionedTripRepository;
+			this._googleMapsRepository = _googleMapsRepository;
 		}
 
 		private List<FractionedTrip> ClusterFractionedTrips(Delivery newfractionedDelivery)
 		{
 			var fractionedTrips = new List<FractionedTrip>();
 
-			var fractionedScheduledTrips = fractionedTripRepository.GetFractionedScheduledDeliveriesByProductType(newfractionedDelivery.ProductType);
+			var fractionedScheduledTrips = _fractionedTripRepository.GetFractionedScheduledDeliveriesByProductType(newfractionedDelivery.ProductType);
 
 			var distancesBetweenAddresses = FillDistanceBetweenEachAddress(fractionedScheduledTrips);
 			
+
 			
 			return fractionedTrips;
 		}
@@ -41,13 +42,17 @@ namespace VRPTW.Business
 			{
 				for(int j = (i + 1); i < fractionedScheduledTrips.Count; j++)
 				{
-						
+					var newDistance = 
+						_googleMapsRepository.GetDistanceBetweenTwoAddresses(fractionedScheduledTrips[i].Address, fractionedScheduledTrips[j].Address);
+
+					distancesBetweenAddresses.Add(
+						Tuple.Create<int, int>(fractionedScheduledTrips[i].DeliveryId, fractionedScheduledTrips[j].DeliveryId), newDistance.Value);
 				}
 			}
 			return distancesBetweenAddresses;
 		}
 														 
-		private IFractionedTripRepository fractionedTripRepository;
-		private IGoogleMapsRepository googleMapsRepository;
+		private IFractionedTripRepository _fractionedTripRepository;
+		private IGoogleMapsRepository _googleMapsRepository;
 	}
 }
