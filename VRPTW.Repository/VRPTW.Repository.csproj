@@ -43,6 +43,9 @@
       <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="oplall">
+      <HintPath>.\oplall.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -54,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddressRepository.cs" />
+    <Compile Include="CEPLEX\CeplexRepository.cs" />
     <Compile Include="DeliveryRepository.cs" />
     <Compile Include="DeliveryTruckTripRepository.cs" />
     <Compile Include="GoogleMapsRepository.cs" />
@@ -61,6 +65,10 @@
     <Compile Include="FractionedTripSchedulerRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\VRPTW.CrossCutting\VRPTW.CrossCutting.csproj">
+      <Project>{E23C4D2D-E89C-4C40-9DE0-A1F88D1D1729}</Project>
+      <Name>VRPTW.CrossCutting</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VRPTW.Domain.Entity\VRPTW.Domain.Entity.csproj">
       <Project>{1C111F9F-055D-4C23-96EA-ACA236A73F6C}</Project>
       <Name>VRPTW.Domain.Entity</Name>
@@ -74,9 +82,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CEPLEX\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -6,6 +6,7 @@ using VRPTW.Business;
 using VRPTW.Domain.Interface.Business;
 using VRPTW.Domain.Interface.Repository;
 using VRPTW.Repository;
+using VRPTW.Repository.CEPLEX;
 using VRPTW.Repository.Scheduler;
 
 namespace VRPTW.DependenciesInjector
@@ -31,6 +32,7 @@ namespace VRPTW.DependenciesInjector
 			container.Register<IGoogleMapsRepository, GoogleMapsRepository>();
 			container.Register<IDeliveryTruckTripRepository, DeliveryTruckTripRepository>();
 			container.Register<IAddressRepository, AddressRepository>();
+			container.Register<ICeplexRepository, CeplexRepository>();
 
 			// Business
 			container.Register<IDeliveryBusiness, DeliveryBusiness>();

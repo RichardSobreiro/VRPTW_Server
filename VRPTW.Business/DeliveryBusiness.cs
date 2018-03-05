@@ -29,7 +29,7 @@ namespace VRPTW.Business
 			var fractionedScheduledTrips = _fractionedTripRepository.GetFractionedScheduledDeliveriesByProductType(newfractionedDelivery.ProductType);
 
 			var distancesBetweenAddresses = FillDistanceBetweenEachAddress(fractionedScheduledTrips);
-			
+
 
 			
 			return fractionedTrips;

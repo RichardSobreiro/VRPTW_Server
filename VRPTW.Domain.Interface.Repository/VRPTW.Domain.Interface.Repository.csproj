@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAddressRepository.cs" />
+    <Compile Include="ICeplexRepository.cs" />
     <Compile Include="IDeliveryTruckTripRepository.cs" />
     <Compile Include="IGoogleMapsRepository.cs" />
     <Compile Include="IDeliveryRepository.cs" />
