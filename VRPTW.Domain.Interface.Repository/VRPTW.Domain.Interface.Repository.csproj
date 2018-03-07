@@ -45,6 +45,7 @@
     <Compile Include="IAddressRepository.cs" />
     <Compile Include="ICeplexRepository.cs" />
     <Compile Include="IDeliveryTruckTripRepository.cs" />
+    <Compile Include="IDepotRepository.cs" />
     <Compile Include="IGoogleMapsRepository.cs" />
     <Compile Include="IDeliveryRepository.cs" />
     <Compile Include="IFractionedTripSchedulerRepository.cs" />

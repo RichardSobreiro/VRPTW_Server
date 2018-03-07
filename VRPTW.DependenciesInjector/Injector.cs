@@ -33,6 +33,7 @@ namespace VRPTW.DependenciesInjector
 			container.Register<IDeliveryTruckTripRepository, DeliveryTruckTripRepository>();
 			container.Register<IAddressRepository, AddressRepository>();
 			container.Register<ICeplexRepository, CeplexRepository>();
+			container.Register<IDepotRepository, DepotRepository>();
 
 			// Business
 			container.Register<IDeliveryBusiness, DeliveryBusiness>();

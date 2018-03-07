@@ -60,6 +60,7 @@
     <Compile Include="CEPLEX\CeplexRepository.cs" />
     <Compile Include="DeliveryRepository.cs" />
     <Compile Include="DeliveryTruckTripRepository.cs" />
+    <Compile Include="DepotRepository.cs" />
     <Compile Include="GoogleMapsRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FractionedTripSchedulerRepository.cs" />
