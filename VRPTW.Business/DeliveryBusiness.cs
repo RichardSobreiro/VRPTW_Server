@@ -16,10 +16,12 @@ namespace VRPTW.Business
 			return deliveryScheduled;
 		}			 
 
-		public DeliveryBusiness(IFractionedTripRepository _fractionedTripRepository, IGoogleMapsRepository _googleMapsRepository)
+		public DeliveryBusiness(IFractionedTripRepository fractionedTripRepository, IGoogleMapsRepository googleMapsRepository,
+			IDepotRepository depotRepository)
 		{
-			this._fractionedTripRepository = _fractionedTripRepository;
-			this._googleMapsRepository = _googleMapsRepository;
+			_fractionedTripRepository = fractionedTripRepository;
+			_googleMapsRepository = googleMapsRepository;
+			_depotRepository = depotRepository;
 		}
 
 		private List<FractionedTrip> ClusterFractionedTrips(Delivery newfractionedDelivery)
@@ -28,10 +30,13 @@ namespace VRPTW.Business
 
 			var fractionedScheduledTrips = _fractionedTripRepository.GetFractionedScheduledDeliveriesByProductType(newfractionedDelivery.ProductType);
 
-			var distancesBetweenAddresses = FillDistanceBetweenEachAddress(fractionedScheduledTrips);
+			var depots = _depotRepository.SelectDepots();
+
+			var distancesBetweenClients = FillDistanceBetweenEachAddress(fractionedScheduledTrips);
+
+			var ceplexParameters = GetCeplexParameters(depots, distancesBetweenClients, fractionedScheduledTrips);
 
 
-			
 			return fractionedTrips;
 		}
 
@@ -51,8 +56,38 @@ namespace VRPTW.Business
 			}
 			return distancesBetweenAddresses;
 		}
+
+		private CeplexParameters GetCeplexParameters(List<Depot> depots, Dictionary<Tuple<int, int>, double> distancesBetweenClients,
+			List<DeliveryTruckTrip> fractionedScheduledTrips)
+		{	
+			foreach(var depot in depots)
+			{
+				var ceplexParameters = new CeplexParameters();
+
+				var numberOfPoints = fractionedScheduledTrips.Count + 1;
+				ceplexParameters.Time = new double[numberOfPoints][];
+				for(int j = 0; j < numberOfPoints; j++)
+				{
+					for (int i = 0; i < numberOfPoints; i++)
+					{
+						if((j == 0 && i == 0) || (j == (numberOfPoints - 1) && i == (numberOfPoints - 1)))
+						{
+							var distance = _googleMapsRepository.GetDistanceBetweenTwoAddresses(depot.Adress, fractionedScheduledTrips[i].Address);
+							if(distance.HasValue)
+							{
+								ceplexParameters.Time[j][i] = distance.Value;
+							}
+						}
+					}
+				}
+
+				ceplexParameters.QuantityOfVehiclesAvailable
+			}
+			return new CeplexParameters();
+		}
 														 
 		private IFractionedTripRepository _fractionedTripRepository;
 		private IGoogleMapsRepository _googleMapsRepository;
+		private IDepotRepository _depotRepository;
 	}
 }

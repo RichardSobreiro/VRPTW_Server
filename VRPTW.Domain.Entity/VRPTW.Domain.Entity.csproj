@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Address.cs" />
+    <Compile Include="CeplexParameters.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Delivery.cs" />
     <Compile Include="DeliveryTruckTrip.cs" />
@@ -52,6 +53,7 @@
     <Compile Include="ProductProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnityMeasurement.cs" />
+    <Compile Include="Vehicle.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VRPTW.CrossCutting\VRPTW.CrossCutting.csproj">

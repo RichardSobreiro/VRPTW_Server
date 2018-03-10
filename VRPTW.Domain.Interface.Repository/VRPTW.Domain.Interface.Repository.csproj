@@ -49,6 +49,7 @@
     <Compile Include="IGoogleMapsRepository.cs" />
     <Compile Include="IDeliveryRepository.cs" />
     <Compile Include="IFractionedTripSchedulerRepository.cs" />
+    <Compile Include="IVehicleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryBase.cs" />
   </ItemGroup>

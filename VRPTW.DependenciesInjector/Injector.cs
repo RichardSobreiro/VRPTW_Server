@@ -7,7 +7,6 @@ using VRPTW.Domain.Interface.Business;
 using VRPTW.Domain.Interface.Repository;
 using VRPTW.Repository;
 using VRPTW.Repository.CEPLEX;
-using VRPTW.Repository.Scheduler;
 
 namespace VRPTW.DependenciesInjector
 {
@@ -34,6 +33,7 @@ namespace VRPTW.DependenciesInjector
 			container.Register<IAddressRepository, AddressRepository>();
 			container.Register<ICeplexRepository, CeplexRepository>();
 			container.Register<IDepotRepository, DepotRepository>();
+			container.Register<IVehicleRepository, VehicleRepository>();
 
 			// Business
 			container.Register<IDeliveryBusiness, DeliveryBusiness>();
