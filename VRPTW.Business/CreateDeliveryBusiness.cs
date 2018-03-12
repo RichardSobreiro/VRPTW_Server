@@ -12,9 +12,9 @@ namespace VRPTW.Business
 {
 	public class CreateDeliveryBusiness: ICreateDeliveryBusiness
 	{
-		public int CreateFractionedDelivery(DeliveryDto deliveryDto)
+		public int CreateFractionedDelivery(DeliveryDto fractionedDeliveryDto)
 		{
-			var delivery = deliveryDto.CreateEntity();
+			var delivery = fractionedDeliveryDto.CreateEntity();
 			return InsertDelivery(delivery);
 		}
 

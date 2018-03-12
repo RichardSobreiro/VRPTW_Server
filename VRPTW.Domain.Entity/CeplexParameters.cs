@@ -8,6 +8,6 @@
 		public int GreatestPossibleDemand { get; set; }
 		public double[][] Time { get; set; }
 		public int[] VehicleCapacity { get; set; }
-		public int[] ClientsDemand { get; set; }
+		public double[] ClientsDemand { get; set; }
 	}
 }

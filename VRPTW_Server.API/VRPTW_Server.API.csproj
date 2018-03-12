@@ -108,14 +108,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\DeliveryController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
+    <ProjectReference Include="..\VRPTW.Domain.Dto\VRPTW.Domain.Dto.csproj">
+      <Project>{443C3604-C849-4F25-9F1C-01DDC51DF10C}</Project>
+      <Name>VRPTW.Domain.Dto</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VRPTW.Domain.Interface.Business\VRPTW.Domain.Interface.Business.csproj">
+      <Project>{296191B4-52C8-4BFF-B42E-186E7A33921B}</Project>
+      <Name>VRPTW.Domain.Interface.Business</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

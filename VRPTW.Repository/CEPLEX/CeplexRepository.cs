@@ -2,14 +2,14 @@
 using ILOG.OPL;
 using System;
 using VRPTW.CrossCutting.Configuration;
+using VRPTW.Domain.Entity;
 using VRPTW.Domain.Interface.Repository;
 
 namespace VRPTW.Repository.CEPLEX
 {
 	public class CeplexRepository : ICeplexRepository
 	{
-		public void SolveFractionedTrips(int quantityOfVehiclesAvailable, int quantityOfClients, int vehiclesGreatestPossibleDemand, 
-			int greatestPossibleDemand, int[][] time, int[] vehicleCapacity, int[] clientsDemand)
+		public void SolveFractionedTrips(CeplexParameters ceplexParameters)
 		{
 			OplFactory.DebugMode = GeneralConfigurations.OplDebugMode;
 			OplFactory oplFactory = new OplFactory();
@@ -27,8 +27,9 @@ namespace VRPTW.Repository.CEPLEX
 
 			OplModel opl = oplFactory.CreateOplModel(def, cp);
 
-			OplDataSource dataSource = new MyData(oplFactory, quantityOfVehiclesAvailable, quantityOfClients, vehiclesGreatestPossibleDemand,
-				greatestPossibleDemand, time, vehicleCapacity, clientsDemand);
+			OplDataSource dataSource = new MyData(oplFactory, ceplexParameters.QuantityOfVehiclesAvailable, ceplexParameters.QuantityOfClients,
+				ceplexParameters.VehiclesGreatestPossibleDemand, ceplexParameters.GreatestPossibleDemand, ceplexParameters.Time,
+				ceplexParameters.VehicleCapacity, ceplexParameters.ClientsDemand);
 			opl.AddDataSource(dataSource);
 			opl.Generate();
 
@@ -40,7 +41,7 @@ namespace VRPTW.Repository.CEPLEX
 			}
 			else
 			{
-				Console.Out.WriteLine("No solution!");
+				throw new Exception();
 			}
 
 			oplFactory.End();
@@ -151,7 +152,7 @@ namespace VRPTW.Repository.CEPLEX
 	internal class MyData : CustomOplDataSource
 	{
 		internal MyData(OplFactory oplF, int quantityOfVehiclesAvailable, int quantityOfClients, int vehiclesGreatestPossibleDemand,
-			int greatestPossibleDemand, int[][] time, int[] vehiclesCapacity, int[] clientsDemand) : base(oplF)
+			int greatestPossibleDemand, double[][] time, int[] vehiclesCapacity, double[] clientsDemand) : base(oplF)
 		{
 			QuantityOfVehiclesAvailable = quantityOfVehiclesAvailable;
 			QuantityOfClientes = quantityOfClients;
@@ -184,7 +185,7 @@ namespace VRPTW.Repository.CEPLEX
 			handler.StartArray();
 			for (int j = 0; j < (QuantityOfClientes + 1); j++)
 				for (int i = 0; i < (QuantityOfClientes + 1); i++)
-					handler.AddIntItem(Time[i][j]);
+					handler.AddNumItem(Time[i][j]);
 			handler.EndArray();
 			handler.EndElement();
 
@@ -198,7 +199,7 @@ namespace VRPTW.Repository.CEPLEX
 			handler.StartElement("ClientsDemand");
 			handler.StartArray();
 			for (int j = 0; j < ClientsDemand.Length; j++)
-				handler.AddIntItem(ClientsDemand[j]);
+				handler.AddNumItem(ClientsDemand[j]);
 			handler.EndArray();
 			handler.EndElement();
 		}
@@ -207,8 +208,8 @@ namespace VRPTW.Repository.CEPLEX
 		private int QuantityOfClientes { get; set; }
 		private int VehiclesGreatestPossibleDemand { get; set; }
 		private int GreatestPossibleDemand { get; set; }
-		private int[][] Time { get; set; }
+		private double[][] Time { get; set; }
 		private int[] VehiclesCapacity { get; set; }
-		private int[] ClientsDemand { get; set; }
+		private double[] ClientsDemand { get; set; }
 	}
 }
