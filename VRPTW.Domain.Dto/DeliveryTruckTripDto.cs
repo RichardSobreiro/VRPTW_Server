@@ -7,7 +7,7 @@ namespace VRPTW.Domain.Dto
 		public int deliveryTruckTripId { get; set; }
 		public int deliveryId { get; set; }
 		public int productType { get; set; }
-		public float quantityProduct { get; set; }
+		public double quantityProduct { get; set; }
 		public DateTime timeTrip { get; set; }
 		public DateTime timeArrivalClient { get; set; }
 	}

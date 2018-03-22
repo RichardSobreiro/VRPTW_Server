@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Web.Http;
 using System.Web.Http.Description;
 using VRPTW.Domain.Dto;
@@ -14,8 +15,15 @@ namespace VRPTW_Server.API.Controllers
 		[ResponseType(typeof(int))]
 		public IHttpActionResult CreateFractionedDelivery([FromBody] JObject _fractionedDeliveryDto)
 		{
-			var fractionedDeliveryDto = JsonConvert.DeserializeObject<DeliveryDto>(JsonConvert.SerializeObject(_fractionedDeliveryDto));
-			return Ok(_createDeliveryBusiness.CreateFractionedDelivery(fractionedDeliveryDto));
+			try
+			{
+				var fractionedDeliveryDto = JsonConvert.DeserializeObject<DeliveryDto>(JsonConvert.SerializeObject(_fractionedDeliveryDto));
+				return Ok(_createDeliveryBusiness.CreateFractionedDelivery(fractionedDeliveryDto));
+			}
+			catch(Exception e)
+			{
+				return(InternalServerError(e));
+			}
 		}
 
 		public DeliveryController(ICreateDeliveryBusiness createDeliveryBusiness)

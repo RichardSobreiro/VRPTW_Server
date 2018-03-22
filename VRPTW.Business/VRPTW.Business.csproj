@@ -48,6 +48,8 @@
     <Compile Include="Mapper\ClientMapper.cs" />
     <Compile Include="Mapper\DeliveryMapper.cs" />
     <Compile Include="Mapper\DeliveryTruckTripMapper.cs" />
+    <Compile Include="Mapper\ProductMapper.cs" />
+    <Compile Include="ProductBusiness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

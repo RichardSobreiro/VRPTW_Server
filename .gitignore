@@ -3,3 +3,20 @@
 ################################################################################
 
 /VRPTW.Business/bin/Debug
+/VRPTW.CrossCutting/bin/Debug
+/VRPTW.DependenciesInjector/bin/Debug
+/VRPTW.CrossCutting/obj/Debug
+/VRPTW.Domain.Dto/bin/Debug
+/VRPTW.Domain.Dto/obj/Debug
+/VRPTW.Domain.Entity/bin/Debug
+/VRPTW.Domain.Entity/obj/Debug
+/VRPTW.Domain.Interface.Business/bin/Debug
+/VRPTW.Domain.Interface.Business/obj/Debug
+/VRPTW.Domain.Interface.Repository/bin/Debug
+/VRPTW.Domain.Interface.Repository/obj/Debug
+/VRPTW.Repository/bin/Debug
+/VRPTW_Server.API/bin
+*.txt
+*.cache
+*.dll
+*.pdb
