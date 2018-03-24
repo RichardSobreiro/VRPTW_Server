@@ -2,7 +2,7 @@
 {
 	public class Product
 	{
-		public int ProductId { get; set; }
+		public int ProductType { get; set; }
 		public string DescriptionProduct { get; set; }
 		public int UnityMeasurementId { get; set; }
 		public float Density { get; set; }

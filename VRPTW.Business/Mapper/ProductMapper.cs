@@ -14,7 +14,7 @@ namespace VRPTW.Business.Mapper
 		{
 			return new Product()
 			{
-				ProductId = productDto.productId,
+				ProductType = productDto.productType,
 				DescriptionProduct = productDto.descriptionProduct,
 				UnityMeasurementId = productDto.unityMeasurementId,
 				Density = productDto.density,
@@ -26,7 +26,7 @@ namespace VRPTW.Business.Mapper
 		{
 			return new ProductDto()
 			{
-				productId = product.ProductId,
+				productType = product.ProductType,
 				descriptionProduct = product.DescriptionProduct,
 				unityMeasurementId = product.UnityMeasurementId,
 				density = product.Density,

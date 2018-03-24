@@ -45,7 +45,7 @@ namespace VRPTW.Repository
 			WHERE ProductId = @ProductId";
 
 		private const string GET_PRODUCTS = @"
-			SELECT ProductId, DescriptionProduct, UnityMeasurementId, Density, ProductProviderId
+			SELECT ProductType, DescriptionProduct, UnityMeasurementId, Density, ProductProviderId
 			FROM Product";
 	}
 }

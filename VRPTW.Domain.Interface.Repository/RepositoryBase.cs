@@ -8,7 +8,7 @@ namespace VRPTW.Domain.Interface.Repository
 	{
 		protected IDbConnection OpenConnection()
 		{
-			return new SqlConnection(ConfigurationManager.ConnectionStrings["VehicleRoutingProblem"].ConnectionString);
+			return new SqlConnection(ConfigurationManager.ConnectionStrings["VEHICLE_ROUTING_PROBLEM"].ConnectionString);
 		}									
 	}
 }

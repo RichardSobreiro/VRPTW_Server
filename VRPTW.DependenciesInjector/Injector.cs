@@ -12,17 +12,38 @@ namespace VRPTW.DependenciesInjector
 {
 	public class Injector
     {		
-		public static void Begins()
+		public static Container GetContainer
 		{
-			
+			get
+			{
+				return container;
+			}
 		}
 
-		private static void BeginsHttpDepencies(HttpConfiguration global, Action<Container> RelateDependencies)
+		//public static void Begins()
+		//{
+		//	Begins(RelateDependencies);
+		//}
+
+		public static void Begins(HttpConfiguration global)
 		{
-			RelateDependencies(container);
+			Begins(global, RelateDependencies);
+		}
+
+		public static void Begins(HttpConfiguration global, Action<Container> DelegateIniciarContainer)
+		{
+			container = new Container();
+			DelegateIniciarContainer(container);
 			global.DependencyResolver = new SimpleInjectorWebApiDependencyResolver(container);
 		}
-		
+
+		//public static void Begins(Action<Container> DelegateIniciarContainer)
+		//{
+		//	container = new Container();
+		//	DelegateIniciarContainer(container);
+		//	System.Web.Mvc.DependencyResolver.SetResolver(new SimpleInjectorDependencyResolver(container));
+		//}
+
 		private static void RelateDependencies(Container container)
 		{
 			// Repository
