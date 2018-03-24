@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="AddressRepository.cs" />
     <Compile Include="CEPLEX\CeplexRepository.cs" />
+    <Compile Include="ClientRepository.cs" />
     <Compile Include="DeliveryRepository.cs" />
     <Compile Include="DeliveryTruckTripRepository.cs" />
     <Compile Include="DepotRepository.cs" />

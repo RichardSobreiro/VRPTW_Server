@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientBusiness.cs" />
     <Compile Include="CreateDeliveryBusiness.cs" />
     <Compile Include="DeliveryBusiness.cs" />
     <Compile Include="Mapper\AddressMapper.cs" />

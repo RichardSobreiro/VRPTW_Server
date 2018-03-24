@@ -18,12 +18,7 @@ namespace VRPTW.DependenciesInjector
 			{
 				return container;
 			}
-		}
-
-		//public static void Begins()
-		//{
-		//	Begins(RelateDependencies);
-		//}
+		} 
 
 		public static void Begins(HttpConfiguration global)
 		{
@@ -35,14 +30,7 @@ namespace VRPTW.DependenciesInjector
 			container = new Container();
 			DelegateIniciarContainer(container);
 			global.DependencyResolver = new SimpleInjectorWebApiDependencyResolver(container);
-		}
-
-		//public static void Begins(Action<Container> DelegateIniciarContainer)
-		//{
-		//	container = new Container();
-		//	DelegateIniciarContainer(container);
-		//	System.Web.Mvc.DependencyResolver.SetResolver(new SimpleInjectorDependencyResolver(container));
-		//}
+		}  
 
 		private static void RelateDependencies(Container container)
 		{
@@ -56,11 +44,13 @@ namespace VRPTW.DependenciesInjector
 			container.Register<IDepotRepository, DepotRepository>();
 			container.Register<IVehicleRepository, VehicleRepository>();
 			container.Register<IProductRepository, ProductRepository>();
+			container.Register<IClientRepository, ClientRepository>();
 
 			// Business
 			container.Register<IDeliveryBusiness, DeliveryBusiness>();
 			container.Register<ICreateDeliveryBusiness, CreateDeliveryBusiness>();
 			container.Register<IProductBusiness, ProductBusiness>();
+			container.Register<IClientBusiness, ClientBusiness>();
 		}
 
 		private static Container container = new Container();

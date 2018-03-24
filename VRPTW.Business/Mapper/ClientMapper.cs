@@ -1,4 +1,5 @@
-﻿using VRPTW.Domain.Dto;
+﻿using System.Collections.Generic;
+using VRPTW.Domain.Dto;
 using VRPTW.Domain.Entity;
 
 namespace VRPTW.Business.Mapper
@@ -29,6 +30,11 @@ namespace VRPTW.Business.Mapper
 				DocumentNumber = clientDto.documentNumber,
 				DocumentType = clientDto.documentType
 			};
+		}
+
+		public static List<ClientDto> CreateDto(this List<Client> clients)
+		{
+			return clients.ConvertAll(client => client.CreateDto());
 		}
 	}
 }
