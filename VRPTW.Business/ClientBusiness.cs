@@ -12,6 +12,8 @@ namespace VRPTW.Business
 		{
 			var client = clientDto.CreateEntity();
 			int clientId = _clientRepository.CreateClient(client);
+			client.Address.ClientId = clientId;
+			_addressRepository.CreateAddres(client.Address);
 			return clientId;
 		}
 
@@ -19,6 +21,8 @@ namespace VRPTW.Business
 		{
 			var client = clientDto.CreateEntity();
 			_clientRepository.EditClient(client);
+			client.Address.ClientId = client.ClientId;
+			_addressRepository.EditAddress(client.Address);
 		}
 
 		public List<ClientDto> GetClients()
@@ -28,11 +32,13 @@ namespace VRPTW.Business
 			return clientsDto;
 		}
 
-		public ClientBusiness(IClientRepository clientRepository)
+		public ClientBusiness(IClientRepository clientRepository, IAddressRepository addressRepository)
 		{
 			_clientRepository = clientRepository;
+			_addressRepository = addressRepository;
 		}
 
 		private readonly IClientRepository _clientRepository;
+		private readonly IAddressRepository _addressRepository;
 	}
 }

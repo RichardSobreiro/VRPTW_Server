@@ -32,23 +32,22 @@ namespace VRPTW.Repository
 		}
 
 		private const string CREATE_CLIENT = @"
-			INSERT_INTO Client (DateCreation, Name, LegalPerson, DocumentNumber, DocumentType)
-			VALUES (DateCreation, Name, LegalPerson, DocumentNumber, DocumentType)
+			INSERT_INTO Client (DateCreation, Name, DocumentNumber, DocumentType)
+			VALUES (DateCreation, Name, DocumentNumber, DocumentType)
 			SELECT SCOPE_IDENTITY()";
 
 		private const string EDIT_CLIENT = @"
 			UPDATE Client 
 			SET 
 				DateCreation = @DateCreation, 
-				Name = @Name, 
-				LegalPerson = @LegalPerson, 
+				Name = @Name,  
 				DocumentNumber = @DocumentNumber, 
 				DocumentType = @DocumentType
 			WHERE 
 				ClientId = @ClientId";
 
 		private const string GET_CLIENTS = @"
-			SELECT ClientId, DateCreation, Name, LegalPerson, DocumentNumber, DocumentType
+			SELECT ClientId, DateCreation, Name, DocumentNumber, DocumentType
 			FROM Client";
 	}
 }

@@ -6,9 +6,9 @@ namespace VRPTW.Domain.Entity
 	{
 		public int ClientId { get; set; }
 		public DateTime DateCreation { get; set; }
-		public string Name { get; set; }
-		public int LegalPerson { get; set; }
+		public string Name { get; set; }	   
 		public int DocumentNumber { get; set; }
 		public int DocumentType { get; set; }
+		public Address Address { get; set; }
 	}
 }

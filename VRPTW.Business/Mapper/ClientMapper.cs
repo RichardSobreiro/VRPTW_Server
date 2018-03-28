@@ -12,10 +12,10 @@ namespace VRPTW.Business.Mapper
 			{
 				clientId = client.ClientId,
 				dateCreation = client.DateCreation,
-				name = client.Name,
-				legalPerson = client.LegalPerson,
+				name = client.Name,						
 				documentNumber = client.DocumentNumber,
-				documentType = client.DocumentType
+				documentType = client.DocumentType,
+				address = client.Address.CreateDto()
 			};
 		}
 
@@ -25,10 +25,10 @@ namespace VRPTW.Business.Mapper
 			{
 				ClientId = clientDto.clientId,
 				DateCreation = clientDto.dateCreation,
-				Name = clientDto.name,
-				LegalPerson = clientDto.legalPerson,
+				Name = clientDto.name,				  
 				DocumentNumber = clientDto.documentNumber,
-				DocumentType = clientDto.documentType
+				DocumentType = clientDto.documentType,
+				Address = clientDto.address.CreateEntity()
 			};
 		}
 

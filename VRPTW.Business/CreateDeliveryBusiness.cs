@@ -53,7 +53,7 @@ namespace VRPTW.Business
 		private void InsertAddres(Delivery delivery)
 		{
 			delivery.Address.ClientId = delivery.ClientId;
-			_addressRepository.InsertAddres(delivery.Address);
+			_addressRepository.CreateAddres(delivery.Address);
 		}
 
 		private List<DeliveryTruckTrip> AllocateQuantityOfProductToTruckTrips(Delivery delivery)

@@ -4,6 +4,7 @@ namespace VRPTW.Domain.Interface.Repository
 {
 	public interface IAddressRepository
 	{
-		void InsertAddres(Address address);
+		void CreateAddres(Address address);
+		void EditAddress(Address address);
 	}
 }
