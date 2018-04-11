@@ -16,9 +16,10 @@ namespace VRPTW.Repository
 		}
 
 		private const string GET_FRACTIONED_SCHEDULED_TRIPS_BY_PRODUCT_TYPE = @"
-			SELECT DeliveryTruckTripId, DeliveryId, ProductType, QuantityProduct, TimeTrip, TimeArrivalClient, StatusTrip
-			FROM DeliveryTruckTrip
-			WHERE StatusTrip = 'S' AND ProductType = @ProductType
-			ORDER BY DeliveryTruckTripId";
+			SELECT dt.DeliveryTruckTripId, dt.DeliveryId, dt.ProductType, dt.QuantityProduct, dt.TimeTrip, dt.TimeArrivalClient, dt.StatusTrip, d.ClientId
+			FROM DeliveryTruckTrip dt
+				INNER JOIN Delivery d ON d.DeliveryId = dt.DeliveryId
+			WHERE dt.StatusTrip = 'P' AND dt.ProductType = @ProductType
+			ORDER BY dt.DeliveryTruckTripId";
 	}
 }

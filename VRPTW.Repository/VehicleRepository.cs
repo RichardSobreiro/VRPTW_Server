@@ -23,7 +23,7 @@ namespace VRPTW.Repository
 			}
 		}
 
-		private static string GET_AVAILABLE_VEHICLES = @"SELECT VehicleId, Available, DepotId WHERE DepotId = @DepotId";
+		private static string GET_AVAILABLE_VEHICLES = @"SELECT VehicleId, Available, DepotId FROM Vehicle WHERE DepotId = @DepotId";
 
 		private static string INSERT_VEHICLE = @"INSERT INTO Vehicle (Available, DepotId) VALUES (1, @DepotId)";
 	}

@@ -10,7 +10,7 @@ namespace VRPTW_Server.API.App_Start
 	{
 		public static void Configure(HttpConfiguration config)
 		{
-			GoogleSigned.AssignAllServices(new GoogleSigned(ConfigurationManager.AppSettings["GMAPS_API-KEY"]));
+			GoogleSigned.AssignAllServices(new GoogleSigned(ConfigurationManager.AppSettings["GMAPS_API_KEY"]));
 
 			config.MapHttpAttributeRoutes();
 

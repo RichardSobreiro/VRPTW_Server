@@ -22,8 +22,24 @@ namespace VRPTW.Repository
 			}
 		}
 
+		public Address GetAddressByClientId(int clientId)
+		{
+			using (var connection = OpenConnection())
+			{
+				return connection.QuerySingleOrDefault<Address>(GET_ADDRESS_BY_CLIENT_ID, new { ClientId = clientId });
+			}
+		}
+
+		public Address GetAddressByDepotId(int depotId)
+		{
+			using (var connection = OpenConnection())
+			{
+				return connection.QuerySingleOrDefault<Address>(GET_ADDRESS_BY_DEPOT_ID, new { DepotId = depotId });
+			}
+		}
+
 		private static string INSERT_ADDRESS = @"
-			INSERT INTO ADDRESS (Street, Number, Neighborhood, City, State, ProductProviderId, ClientId, DepotId)
+			INSERT INTO ADDRESS (Street, StreetNumber, Neighborhood, City, CountryState, ProductProviderId, ClientId, DepotId)
 			VALUES (@Street, @Number, @Neighborhood, @City, @State, @ProductProviderId, @ClientId, @DepotId)";
 
 		private static string EDIT_CLIENT_ADDRESS = @"
@@ -39,5 +55,37 @@ namespace VRPTW.Repository
 				DepotId = @DepotId
 			WHERE 
 				AddressId = @AddressId";
+
+		private const string GET_ADDRESS_BY_CLIENT_ID = @"
+			SELECT 
+				AddressId,
+				Street, 
+				StreetNumber AS Number, 
+				Neighborhood, 
+				City, 
+				CountryState AS State, 
+				ProductProviderId, 
+				ClientId, 
+				DepotId
+			FROM 
+				Address
+			WHERE 
+				ClientId = @ClientId";
+
+		private const string GET_ADDRESS_BY_DEPOT_ID = @"
+			SELECT 
+				AddressId,
+				Street, 
+				StreetNumber AS Number, 
+				Neighborhood, 
+				City, 
+				CountryState AS State, 
+				ProductProviderId, 
+				ClientId, 
+				DepotId
+			FROM 
+				Address
+			WHERE 
+				DepotId = @DepotId";
 	}
 }

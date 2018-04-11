@@ -4,6 +4,6 @@ namespace VRPTW.Domain.Interface.Repository
 {
 	public interface ICeplexRepository
 	{
-		void SolveFractionedTrips(CeplexParameters ceplexParameters);
+		int[][] SolveFractionedTrips(CeplexParameters ceplexParameters);
 	}
 }

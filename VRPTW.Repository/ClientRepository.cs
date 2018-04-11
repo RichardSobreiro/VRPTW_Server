@@ -32,8 +32,8 @@ namespace VRPTW.Repository
 		}
 
 		private const string CREATE_CLIENT = @"
-			INSERT_INTO Client (DateCreation, Name, DocumentNumber, DocumentType)
-			VALUES (DateCreation, Name, DocumentNumber, DocumentType)
+			INSERT INTO Client (DateCreation, Name, DocumentNumber, DocumentType)
+			VALUES (GETDATE(), @Name, @DocumentNumber, @DocumentType)
 			SELECT SCOPE_IDENTITY()";
 
 		private const string EDIT_CLIENT = @"

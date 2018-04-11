@@ -6,5 +6,7 @@ namespace VRPTW.Domain.Interface.Repository
 	{
 		void CreateAddres(Address address);
 		void EditAddress(Address address);
+		Address GetAddressByClientId(int clientId);
+		Address GetAddressByDepotId(int depotId);
 	}
 }

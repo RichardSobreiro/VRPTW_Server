@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Transactions;
+using VRPTW.Business.Internal;
 using VRPTW.Business.Mapper;
 using VRPTW.CrossCutting.Enumerations;
 using VRPTW.Domain.Dto;
@@ -18,23 +19,17 @@ namespace VRPTW.Business
 			return InsertDelivery(delivery);
 		}
 
-		public CreateDeliveryBusiness(IDeliveryRepository deliveryRepository, IDeliveryTruckTripRepository deliveryTruckTripRepository,
-			IAddressRepository addressRepository)
-		{
-			_deliveryRepository = deliveryRepository;
-			_deliveryTruckTripRepository = deliveryTruckTripRepository;
-			_addressRepository = addressRepository;
-		}
-
 		private int InsertDelivery(Delivery delivery)
 		{
 			using (var transaction = new TransactionScope())
 			{
 				delivery.DeliveryId = _deliveryRepository.InsertDelivery(delivery);
 
-				InsertDeliveriesTruckTrips(delivery);
+				delivery.DeliveriesTruckTips = AllocateQuantityOfProductToTruckTrips(delivery);
 
-				InsertAddres(delivery);
+				_deliveryInternal.ClusterFractionedTrips(delivery);
+
+				InsertDeliveriesTruckTrips(delivery);
 
 				transaction.Complete();
 			}
@@ -48,13 +43,7 @@ namespace VRPTW.Business
 				deliveryTruckTrip.DeliveryId = delivery.DeliveryId;
 				_deliveryTruckTripRepository.InsertDeliveryTruckTrip(deliveryTruckTrip);
 			});
-		}
-
-		private void InsertAddres(Delivery delivery)
-		{
-			delivery.Address.ClientId = delivery.ClientId;
-			_addressRepository.CreateAddres(delivery.Address);
-		}
+		} 
 
 		private List<DeliveryTruckTrip> AllocateQuantityOfProductToTruckTrips(Delivery delivery)
 		{
@@ -71,6 +60,7 @@ namespace VRPTW.Business
 					ProductType = delivery.ProductType,
 					QuantityProduct = GetDeliveryTruckTripQuantityOfProductToDelivery(ref quantityOfProductToDelivery)
 				};
+				deliveriesTruckTrips.Add(newTrip);
 			}
 
 			return deliveriesTruckTrips;
@@ -92,9 +82,22 @@ namespace VRPTW.Business
 
 			return quantityOfProductToDelivery;
 		}
-
+	
 		private IDeliveryRepository _deliveryRepository;
 		private IDeliveryTruckTripRepository _deliveryTruckTripRepository;
 		private IAddressRepository _addressRepository;
+		private DeliveryInternal _deliveryInternal;
+
+		public CreateDeliveryBusiness(IDeliveryRepository deliveryRepository, IDeliveryTruckTripRepository deliveryTruckTripRepository,
+			IAddressRepository addressRepository, IFractionedTripRepository fractionedTripRepository, IGoogleMapsRepository googleMapsRepository,
+			IDepotRepository depotRepository, IVehicleRepository vehicleRepository, ICeplexRepository ceplexRepository)
+		{
+			_deliveryRepository = deliveryRepository;
+			_deliveryTruckTripRepository = deliveryTruckTripRepository;
+			_addressRepository = addressRepository;
+
+			_deliveryInternal = new DeliveryInternal(fractionedTripRepository, googleMapsRepository, depotRepository, vehicleRepository, 
+				addressRepository, ceplexRepository);
+		}
 	}
 }

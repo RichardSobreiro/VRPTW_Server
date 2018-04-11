@@ -10,6 +10,7 @@
 		public string State { get; set; }
 		public int? ProductProviderId { get; set; }
 		public int? ClientId { get; set; }
+		public int? DepotId { get; set; }
 		public string FormattedAddress
 		{
 			get

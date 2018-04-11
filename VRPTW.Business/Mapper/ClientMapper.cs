@@ -15,7 +15,7 @@ namespace VRPTW.Business.Mapper
 				name = client.Name,						
 				documentNumber = client.DocumentNumber,
 				documentType = client.DocumentType,
-				address = client.Address.CreateDto()
+				address = client.Address?.CreateDto()
 			};
 		}
 
@@ -28,7 +28,7 @@ namespace VRPTW.Business.Mapper
 				Name = clientDto.name,				  
 				DocumentNumber = clientDto.documentNumber,
 				DocumentType = clientDto.documentType,
-				Address = clientDto.address.CreateEntity()
+				Address = clientDto.address?.CreateEntity()
 			};
 		}
 

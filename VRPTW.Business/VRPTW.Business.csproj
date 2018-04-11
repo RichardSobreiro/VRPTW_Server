@@ -45,6 +45,7 @@
     <Compile Include="ClientBusiness.cs" />
     <Compile Include="CreateDeliveryBusiness.cs" />
     <Compile Include="DeliveryBusiness.cs" />
+    <Compile Include="Internal\DeliveryInternal.cs" />
     <Compile Include="Mapper\AddressMapper.cs" />
     <Compile Include="Mapper\ClientMapper.cs" />
     <Compile Include="Mapper\DeliveryMapper.cs" />

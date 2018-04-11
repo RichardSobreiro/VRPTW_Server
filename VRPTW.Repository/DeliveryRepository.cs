@@ -24,8 +24,8 @@ namespace VRPTW.Repository
 		}
 
 		private const string INSERT_DELIVERY = @"
-			INSERT INTO Delivery (DateDelivery, ClientId, ProductId, QuantityProduct)
-			VALUES (@DateDelivery, @ClientId, @ProductId, @QuantityProduct)
+			INSERT INTO Delivery (DateDelivery, ClientId, ProductType, QuantityProduct)
+			VALUES (@DateDelivery, @ClientId, @ProductType, @QuantityProduct)
 			SELECT SCOPE_IDENTITY()";
 
 		private const string GET_DELIVERIES = @"

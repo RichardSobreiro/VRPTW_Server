@@ -24,8 +24,8 @@ namespace VRPTW.Repository
 		}
 
 		private const string INSERT_DELIVERY_TRUCK_TRIP = @"
-			INSERT INTO DeliveryTruckTrip DeliveryTruckTrip (DeliveryId, ProductType, QuantityProduct, TimeTrip, TimeArrivalClient, StatusTrip) 
-			Values (@DeliveryId, @ProductType, @QuantityProduct, @TimeTrip, @TimeArrivalClient, 'P')";
+			INSERT INTO DeliveryTruckTrip (DeliveryId, ProductType, QuantityProduct, StatusTrip) 
+			Values (@DeliveryId, @ProductType, @QuantityProduct, 'P')";
 
 		private const string SELECT_DELIVERY_TRUCK_TRIP_BY_ID = @"
 			SELECT DeliveryTruckTripId, DeliveryId, ProductType, QuantityProduct, TimeTrip, TimeArrivalClient, StatusTrip
