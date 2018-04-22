@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using VRPTW.Domain.Entity;
 using VRPTW.Domain.Interface.Repository;
@@ -12,7 +11,7 @@ namespace VRPTW.Repository.CEPLEX
 {
 	public class CeplexRepository : ICeplexRepository
 	{
-		public int[][] SolveFractionedTrips(CeplexParameters ceplexParameters)
+		public bool[][] SolveFractionedTrips(CeplexParameters ceplexParameters)
 		{
 			CreateDataFile(ceplexParameters);
 			CallSolver();
@@ -108,29 +107,27 @@ namespace VRPTW.Repository.CEPLEX
 			}
 		}
 
-		private int[][] GetRoute(CeplexParameters ceplexParameters)
+		private bool[][] GetRoute(CeplexParameters ceplexParameters)
 		{
-			int[][] routeMatrix = new int[ceplexParameters.QuantityOfClients + 1][];
+			bool[][] routeMatrix = new bool[ceplexParameters.QuantityOfClients + 1][];
 			using (var reader = new StreamReader("C:\\Users\\Richard\\Desktop\\Mulprod\\Solution1.txt"))
 			{
 				string solutionText = Task.Run(() => reader.ReadToEndAsync()).Result;
 
-				//string x = ExtractFromString(solutionText, "x =", "];");
-				//x = x.Replace(" ", "");
-				//x = Regex.Replace(x, @"\t|\n|\r", "");
-				//Regex re = new Regex(@"\d+");
-				//Match m = re.Match(x);
-				//for(int j = ceplexParameters.QuantityOfClients; j >= 0; j--)
-				//{
-				//	routeMatrix[j] = new int[ceplexParameters.QuantityOfClients + 1];
-				//	for(int i = ceplexParameters.QuantityOfClients; i >= 0; i--)
-				//	{
-				//		routeMatrix[j][i] = int.Parse(m.Value.ToString());
-				//		x = x.Substring(m.Index + 1);
-				//		m = re.Match(x);
-				//	}
-				//}
-
+				for(int k = 1; k <= ceplexParameters.QuantityOfVehiclesAvailable; k++)
+				{	
+					for (int j = 1; j <= ceplexParameters.QuantityOfClients+1; j++)
+					{
+						routeMatrix[j-1] = new bool[ceplexParameters.QuantityOfClients + 1];
+						for (int i = 1; i <= ceplexParameters.QuantityOfClients+1; i++)
+						{
+							if(solutionText.Contains("x["+ j + "][" + i + "][" + k + "]"))
+								routeMatrix[j-1][i-1] = true;
+							else
+								routeMatrix[j-1][i-1] = false;
+						}
+					}
+				}
 			}
 			return routeMatrix;
 		}

@@ -20,3 +20,12 @@
 *.cache
 *.dll
 *.pdb
+/VRPTW.Business/obj
+/VRPTW.CrossCutting/obj/Release
+/VRPTW.DependenciesInjector/obj
+/VRPTW.Domain.Dto/obj/Release
+/VRPTW.Domain.Entity/obj/Release
+/VRPTW.Domain.Interface.Business/obj/Release
+/VRPTW.Domain.Interface.Repository/obj/Release
+/VRPTW.Repository/obj
+/VRPTW_Server.API/obj

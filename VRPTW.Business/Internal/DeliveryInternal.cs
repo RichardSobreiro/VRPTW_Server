@@ -24,16 +24,16 @@ namespace VRPTW.Business.Internal
 			foreach (var depot in depots)
 			{
 				var ceplexParameters = GetCeplexParameters(depot, fractionedScheduledTrips);
-				int[][] routeMatrix = _ceplexRepository.SolveFractionedTrips(ceplexParameters);
-				//GetRouteFinded(depot, fractionedScheduledTrips, ceplexParameters, routeMatrix);
+				bool[][] routeMatrix = _ceplexRepository.SolveFractionedTrips(ceplexParameters);
+				GetRouteFinded(depot, fractionedScheduledTrips, ceplexParameters, routeMatrix);
 			}
 		}
 
 		private void GetRouteFinded(Depot depot, List<DeliveryTruckTrip> fractionedScheduledTrips, 
-			CeplexParameters ceplexParameters, int[][] routeMatrix)
+			CeplexParameters ceplexParameters, bool[][] routeMatrix)
 		{
 			var route = new Route();
-			for(int i = 0; i < ceplexParameters.QuantityOfClients; i++)
+			for(int i = 0; i <= ceplexParameters.QuantityOfClients; i++)
 			{
 				var subRoute = new SubRoute();
 				double distance = 0;
@@ -56,14 +56,14 @@ namespace VRPTW.Business.Internal
 			}
 		}
 
-		private int FindAddessIdOfTripInRouteMatrix(int originIndex, int numberOfNodes, int[][] routeMatrix, 
+		private int FindAddessIdOfTripInRouteMatrix(int originIndex, int numberOfNodes, bool[][] routeMatrix, 
 			List<DeliveryTruckTrip> fractionedScheduledTrips, CeplexParameters ceplexParameters, out double distance)
 		{
 			int indexTrip = 0;
 			
 			for(int i = 0; i < numberOfNodes; i++)
 			{
-				if(routeMatrix[originIndex][i] == 1)
+				if(routeMatrix[originIndex][i])
 				{
 					indexTrip =  i;
 					break;
