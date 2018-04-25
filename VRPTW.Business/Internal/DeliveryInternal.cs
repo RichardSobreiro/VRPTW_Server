@@ -8,14 +8,17 @@ namespace VRPTW.Business.Internal
 {
 	internal class DeliveryInternal
 	{
-		internal void ClusterFractionedTrips(Delivery newfractionedDelivery)
+		internal List<Delivery> GetDeliveriesByFilter(FilterDelivery filterDelivery)
+		{
+			var deliveries = _deliveryRepository.GetDeliveriesByFilter(filterDelivery);
+			return deliveries;
+		}
+
+		internal void ClusterFractionedTrips(List<Delivery> deliveriesTobeScheduled)
 		{
 			var fractionedTrips = new List<FractionedTrip>();
-
-			var fractionedScheduledTrips = GetDeliveryTruckTripsByProductType(newfractionedDelivery);
-
-			var depots = GetDepots();	   
-
+			var fractionedScheduledTrips = GetDeliveryTruckTripsByProductType(deliveriesTobeScheduled[0].ProductType);
+			var depots = GetDepots();	   												   
 			FindRoutes(depots, fractionedScheduledTrips);
 		}
 
@@ -166,14 +169,9 @@ namespace VRPTW.Business.Internal
 			return depots;
 		}
 
-		private List<DeliveryTruckTrip> GetDeliveryTruckTripsByProductType(Delivery newfractionedDelivery)
+		private List<DeliveryTruckTrip> GetDeliveryTruckTripsByProductType(int productType)
 		{
-			var fractionedScheduledTrips = _fractionedTripRepository.GetFractionedScheduledDeliveriesByProductType(newfractionedDelivery.ProductType);
-			foreach(var newDeliveryTruckTrip in newfractionedDelivery.DeliveriesTruckTips)
-			{
-				newDeliveryTruckTrip.ClientId = newfractionedDelivery.ClientId;
-			}
-			fractionedScheduledTrips.AddRange(newfractionedDelivery.DeliveriesTruckTips);
+			var fractionedScheduledTrips = _fractionedTripRepository.GetFractionedScheduledDeliveriesByProductType(productType);
 			foreach(var fractionedScheduledTrip in fractionedScheduledTrips)
 			{
 				fractionedScheduledTrip.Address = _addressRepository.GetAddressByClientId(fractionedScheduledTrip.ClientId);
@@ -193,11 +191,12 @@ namespace VRPTW.Business.Internal
 			_ceplexRepository = ceplexRepository;
 		}
 
-		private IFractionedTripRepository _fractionedTripRepository;
-		private IGoogleMapsRepository _googleMapsRepository;
-		private IDepotRepository _depotRepository;
-		private IVehicleRepository _vehicleRepository;
-		private IAddressRepository _addressRepository;
-		private ICeplexRepository _ceplexRepository;
+		private readonly IDeliveryRepository _deliveryRepository;
+		private readonly IFractionedTripRepository _fractionedTripRepository;
+		private readonly IGoogleMapsRepository _googleMapsRepository;
+		private readonly IDepotRepository _depotRepository;
+		private readonly IVehicleRepository _vehicleRepository;
+		private readonly IAddressRepository _addressRepository;
+		private readonly ICeplexRepository _ceplexRepository;
 	}
 }

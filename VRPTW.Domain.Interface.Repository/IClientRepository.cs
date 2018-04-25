@@ -7,6 +7,7 @@ namespace VRPTW.Domain.Interface.Repository
 	{
 		int CreateClient(Client client);
 		void EditClient(Client client);
-		List<Client> GetClients();
+		List<Client> GetClientsByName(string clientName);
+		Client GetClientById(int clientId);
 	}
 }

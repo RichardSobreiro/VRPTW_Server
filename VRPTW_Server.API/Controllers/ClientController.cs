@@ -10,14 +10,30 @@ namespace VRPTW_Server.API.Controllers
 	public class ClientController : BaseController
     {
 		[HttpGet]
-		[Route("client/clients")]
+		[Route("client/clientbyname/{clientName}")]
 		[ResponseType(typeof(List<ClientDto>))]
-		public IHttpActionResult GetClients()
+		public IHttpActionResult GetClients(string clientName)
 		{
 			try
 			{
-				var clientsDto = _clientBusiness.GetClients();
+				var clientsDto = _clientBusiness.GetClientsByName(clientName);
 				return Ok(clientsDto);
+			}
+			catch(Exception e)
+			{
+				return InternalServerError(e);
+			}
+		}
+
+		[HttpGet]
+		[Route("client/{clientId}")]
+		[ResponseType(typeof(ClientDto))]
+		public IHttpActionResult GetClientById(int clientId)
+		{
+			try
+			{
+				var client = _clientBusiness.GetClientById(clientId);
+				return Ok(client);
 			}
 			catch(Exception e)
 			{

@@ -2,6 +2,7 @@
 using System.Transactions;
 using VRPTW.Business.Mapper;
 using VRPTW.Domain.Dto;
+using VRPTW.Domain.Entity;
 using VRPTW.Domain.Interface.Business;
 using VRPTW.Domain.Interface.Repository;
 
@@ -36,21 +37,39 @@ namespace VRPTW.Business
 			}
 		}
 
-		public List<ClientDto> GetClients()
+		public List<ClientDto> GetClientsByName(string clientName)
 		{
-			var clients = _clientRepository.GetClients();
-			foreach(var client in clients)
-			{
-				client.Address = _addressRepository.GetAddressByClientId(client.ClientId);
-			}
+			var clients = _clientRepository.GetClientsByName(clientName);
+			FillClientsAddress(clients);
 			var clientsDto = clients.CreateDto();
 			return clientsDto;
+		}
+
+		public ClientDto GetClientById(int clientId)
+		{
+			var client = _clientRepository.GetClientById(clientId);
+			FillClientAddress(client);
+			var clientDto = client.CreateDto();
+			return clientDto;
 		}
 
 		public ClientBusiness(IClientRepository clientRepository, IAddressRepository addressRepository)
 		{
 			_clientRepository = clientRepository;
 			_addressRepository = addressRepository;
+		}
+
+		private void FillClientsAddress(List<Client> clients)
+		{
+			foreach (var client in clients)
+			{
+				FillClientAddress(client);
+			}
+		}
+
+		private void FillClientAddress(Client client)
+		{
+			client.Address = _addressRepository.GetAddressByClientId(client.ClientId);
 		}
 
 		private readonly IClientRepository _clientRepository;

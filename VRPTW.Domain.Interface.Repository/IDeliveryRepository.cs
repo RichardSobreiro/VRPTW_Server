@@ -6,6 +6,6 @@ namespace VRPTW.Domain.Interface.Repository
 	public interface IDeliveryRepository
     {
 		int InsertDelivery(Delivery delivery);
-		List<Delivery> GetDeliveries();
+		List<Delivery> GetDeliveriesByFilter(FilterDelivery filterDelivery);
 	}
 }

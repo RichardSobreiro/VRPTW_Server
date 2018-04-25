@@ -21,13 +21,11 @@ namespace VRPTW.Business
 
 		private int InsertDelivery(Delivery delivery)
 		{
+			delivery.DeliveriesTruckTips = AllocateQuantityOfProductToTruckTrips(delivery);
+
 			using (var transaction = new TransactionScope())
 			{
 				delivery.DeliveryId = _deliveryRepository.InsertDelivery(delivery);
-
-				delivery.DeliveriesTruckTips = AllocateQuantityOfProductToTruckTrips(delivery);
-
-				_deliveryInternal.ClusterFractionedTrips(delivery);
 
 				InsertDeliveriesTruckTrips(delivery);
 

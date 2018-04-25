@@ -23,11 +23,20 @@ namespace VRPTW.Repository
 			}
 		}
 
-		public List<Client> GetClients()
+		public List<Client> GetClientsByName(string clientName)
+		{
+			clientName = "%" + clientName + "%";
+			using (var connection = OpenConnection())
+			{
+				return connection.Query<Client>(GET_CLIENTS_BY_NAME, new { ClientName = clientName }).AsList();
+			}
+		}
+
+		public Client GetClientById(int clientId)
 		{
 			using (var connection = OpenConnection())
 			{
-				return connection.Query<Client>(GET_CLIENTS).AsList();
+				return connection.QuerySingleOrDefault<Client>(GET_CLIENT_BY_ID, new { ClientId = clientId });
 			}
 		}
 
@@ -46,8 +55,14 @@ namespace VRPTW.Repository
 			WHERE 
 				ClientId = @ClientId";
 
-		private const string GET_CLIENTS = @"
+		private const string GET_CLIENTS_BY_NAME = @"
 			SELECT ClientId, DateCreation, Name, DocumentNumber, DocumentType
-			FROM Client";
+			FROM Client
+			WHERE Name LIKE @ClientName";
+
+		private const string GET_CLIENT_BY_ID = @"
+			SELECT ClientId, DateCreation, Name, DocumentNumber, DocumentType
+			FROM Client
+			WHERE ClientId = @ClientId";
 	}
 }

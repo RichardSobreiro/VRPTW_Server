@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Description;
 using VRPTW.Domain.Dto;
@@ -9,14 +10,14 @@ namespace VRPTW_Server.API.Controllers
 	public class DeliveryController : BaseController
 	{
 		[HttpGet]
-		[Route("scheduledfractioneddelivery")]
-		[ResponseType(typeof(void))]
-		public IHttpActionResult ScheduleFractionedTrip([FromBody] DeliveryDto deliveryTobeScheduled)
+		[Route("delivery/deliveries")]
+		[ResponseType(typeof(List<DeliveryDto>))]
+		public IHttpActionResult GetDeliveriesByFilter([FromBody] FilterDeliveryDto filterDeliveryDto)
 		{
 			try
 			{
-				_deliveryBusiness.ScheduleFractionedTrip(deliveryTobeScheduled);
-				return Ok();
+				var deliveries = _deliveryBusiness.GetDeliveriesByFilter(filterDeliveryDto);
+				return Ok(deliveries);
 			}
 			catch(Exception e)
 			{
@@ -36,6 +37,22 @@ namespace VRPTW_Server.API.Controllers
 			catch(Exception e)
 			{
 				return(InternalServerError(e));
+			}
+		}
+
+		[HttpPost]
+		[Route("scheduledfractioneddelivery")]
+		[ResponseType(typeof(void))]
+		public IHttpActionResult ScheduleFractionedTrip([FromBody] List<DeliveryDto> deliveryTobeScheduled)
+		{
+			try
+			{
+				_deliveryBusiness.ScheduleDeliveries(deliveryTobeScheduled);
+				return Ok();
+			}
+			catch(Exception e)
+			{
+				return InternalServerError(e);
 			}
 		}
 

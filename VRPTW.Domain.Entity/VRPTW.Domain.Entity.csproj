@@ -48,6 +48,7 @@
     <Compile Include="DeliveryTruckTrip.cs" />
     <Compile Include="Depot.cs" />
     <Compile Include="DocumentsClient.cs" />
+    <Compile Include="FilterDelivery.cs" />
     <Compile Include="FractionedTrip.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="ProductProvider.cs" />

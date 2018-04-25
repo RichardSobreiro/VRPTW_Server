@@ -7,6 +7,7 @@ namespace VRPTW.Domain.Interface.Business
 	{
 		int CreateClient(ClientDto clientDto);
 		void EditClient(ClientDto clientDto);
-		List<ClientDto> GetClients();
+		List<ClientDto> GetClientsByName(string clientName);
+		ClientDto GetClientById(int clientId);
 	}
 }

@@ -38,5 +38,10 @@ namespace VRPTW.Business.Mapper
 		{
 			return entities.ConvertAll(entity => entity.CreateDto());
 		}
+
+		public static List<Delivery> CreateEntity(this List<DeliveryDto> dtos)
+		{
+			return dtos.ConvertAll(dto => dto.CreateEntity());
+		}
 	}
 }
