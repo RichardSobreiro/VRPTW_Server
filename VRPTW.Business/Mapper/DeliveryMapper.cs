@@ -43,5 +43,19 @@ namespace VRPTW.Business.Mapper
 		{
 			return dtos.ConvertAll(dto => dto.CreateEntity());
 		}
+
+		public static StatusDeliveryDto CreateDto(this StatusDelivery entity)
+		{
+			return new StatusDeliveryDto()
+			{
+				valueStatus = entity.ValueStatus,
+				descriptionStatus = entity.DescriptionStatus	
+			};
+		}
+
+		public static List<StatusDeliveryDto> CreateDto(this List<StatusDelivery> entities)
+		{
+			return entities.ConvertAll(entity => entity.CreateDto());
+		}
 	}
 }

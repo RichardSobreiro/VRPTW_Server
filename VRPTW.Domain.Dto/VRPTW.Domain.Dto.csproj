@@ -48,6 +48,7 @@
     <Compile Include="FilterDeliveryDto.cs" />
     <Compile Include="ProductDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StatusDeliveryDto.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VRPTW.CrossCutting\VRPTW.CrossCutting.csproj">

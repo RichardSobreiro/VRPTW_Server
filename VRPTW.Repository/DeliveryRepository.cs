@@ -77,6 +77,14 @@ namespace VRPTW.Repository
 			}
 		}
 
+		public List<StatusDelivery> GetStatusDeliveries()
+		{
+			using (var connection = OpenConnection())
+			{
+				return connection.Query<StatusDelivery>(GET_DELIVERIES_STATUS).AsList();
+			}
+		}
+
 		private const string INSERT_DELIVERY = @"
 			INSERT INTO Delivery (DateDelivery, ClientId, ProductType, QuantityProduct)
 			VALUES (@DateDelivery, @ClientId, @ProductType, @QuantityProduct)
@@ -89,5 +97,9 @@ namespace VRPTW.Repository
 			SELECT DeliveryId, DateDelivery, ClientId, ProductId, QuantityProduct 
 			FROM Delivery
 			WHERE {0}";
+
+		private const string GET_DELIVERIES_STATUS = @"
+			SELECT ValueStatus, DescriptionStatus
+			FROM StatusDelivery";
     }
 }

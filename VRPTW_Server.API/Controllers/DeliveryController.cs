@@ -56,6 +56,22 @@ namespace VRPTW_Server.API.Controllers
 			}
 		}
 
+		[HttpGet]
+		[Route("statusdeliveries")]
+		[ResponseType(typeof(List<StatusDeliveryDto>))]
+		public IHttpActionResult GetStatusDeliveries()
+		{
+			try
+			{
+				var statusDeliveries = _deliveryBusiness.GetStatusDeliveries();
+				return Ok(statusDeliveries);
+			}
+			catch(Exception e)
+			{
+				return InternalServerError(e);
+			}
+		}
+
 		public DeliveryController(ICreateDeliveryBusiness createDeliveryBusiness, IDeliveryBusiness deliveryBusiness)
 		{
 			_createDeliveryBusiness = createDeliveryBusiness;

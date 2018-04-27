@@ -7,5 +7,6 @@ namespace VRPTW.Domain.Interface.Repository
     {
 		int InsertDelivery(Delivery delivery);
 		List<Delivery> GetDeliveriesByFilter(FilterDelivery filterDelivery);
+		List<StatusDelivery> GetStatusDeliveries();
 	}
 }

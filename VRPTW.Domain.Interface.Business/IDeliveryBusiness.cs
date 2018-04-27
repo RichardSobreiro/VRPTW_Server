@@ -7,5 +7,6 @@ namespace VRPTW.Domain.Interface.Business
     {
 		void ScheduleDeliveries(List<DeliveryDto> deliveriesTobeScheduled);
 		List<DeliveryDto> GetDeliveriesByFilter(FilterDeliveryDto filterDeliveryDto);
+		List<StatusDeliveryDto> GetStatusDeliveries();
 	}
 }

@@ -179,10 +179,11 @@ namespace VRPTW.Business.Internal
 			return fractionedScheduledTrips;
 		}
 
-		internal DeliveryInternal(IFractionedTripRepository fractionedTripRepository, IGoogleMapsRepository googleMapsRepository,
+		internal DeliveryInternal(IDeliveryRepository deliveryRepository, IFractionedTripRepository fractionedTripRepository, IGoogleMapsRepository googleMapsRepository,
 			IDepotRepository depotRepository, IVehicleRepository vehicleRepository, IAddressRepository addressRepository,
 			ICeplexRepository ceplexRepository)
 		{
+			_deliveryRepository = deliveryRepository;
 			_fractionedTripRepository = fractionedTripRepository;
 			_googleMapsRepository = googleMapsRepository;
 			_depotRepository = depotRepository;

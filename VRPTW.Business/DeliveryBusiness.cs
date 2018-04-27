@@ -23,14 +23,22 @@ namespace VRPTW.Business
 			return deliveriesDto;
 		}
 
-		public DeliveryBusiness(IFractionedTripRepository fractionedTripRepository, IGoogleMapsRepository googleMapsRepository,
+		public List<StatusDeliveryDto> GetStatusDeliveries()
+		{
+			return _deliveryRepository.GetStatusDeliveries()?.CreateDto();
+		}
+
+		public DeliveryBusiness(IDeliveryRepository deliveryRepository, 
+			IFractionedTripRepository fractionedTripRepository, IGoogleMapsRepository googleMapsRepository,
 			IDepotRepository depotRepository, IVehicleRepository vehicleRepository, IAddressRepository addressRepository,
 			ICeplexRepository ceplexRepository)
-		{ 
-			_deliveryInternal = new DeliveryInternal(fractionedTripRepository, googleMapsRepository, depotRepository, vehicleRepository, 
-				addressRepository, ceplexRepository);
-		}  
+		{
+			_deliveryRepository = deliveryRepository;
+			_deliveryInternal = new DeliveryInternal(deliveryRepository, fractionedTripRepository, googleMapsRepository, 
+				depotRepository, vehicleRepository, addressRepository, ceplexRepository);
+		}
 
+		private readonly IDeliveryRepository _deliveryRepository;
 		private DeliveryInternal _deliveryInternal;	
 	}
 }
