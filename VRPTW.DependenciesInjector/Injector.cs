@@ -45,12 +45,14 @@ namespace VRPTW.DependenciesInjector
 			container.Register<IVehicleRepository, VehicleRepository>();
 			container.Register<IProductRepository, ProductRepository>();
 			container.Register<IClientRepository, ClientRepository>();
+			container.Register<IVehicleRouteRepository, VehicleRouteRepository>();
 
 			// Business
 			container.Register<IDeliveryBusiness, DeliveryBusiness>();
 			container.Register<ICreateDeliveryBusiness, CreateDeliveryBusiness>();
 			container.Register<IProductBusiness, ProductBusiness>();
 			container.Register<IClientBusiness, ClientBusiness>();
+			container.Register<IVehicleRouteBusiness, VehicleRouteBusiness>();
 		}
 
 		private static Container container = new Container();

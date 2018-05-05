@@ -43,10 +43,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\GeneralConfigurations.cs" />
-    <Compile Include="Enumerations\StatusDelivery.cs" />
-    <Compile Include="Enumerations\StatusTrip.cs" />
-    <Compile Include="Enumerations\VehicleCapacity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Enumerations\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

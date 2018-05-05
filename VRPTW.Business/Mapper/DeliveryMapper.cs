@@ -16,6 +16,7 @@ namespace VRPTW.Business.Mapper
 				ProductType = deliveryDto.productType,
 				QuantityProduct = deliveryDto.quantityProduct,
 				DeliveriesTruckTips = deliveryDto.deliveriesTruckTips?.CreateEntity(),
+				Client = deliveryDto.client?.CreateEntity(),
 				Address = deliveryDto.address?.CreateEntity()
 			};
 		}
@@ -29,6 +30,9 @@ namespace VRPTW.Business.Mapper
 				clientId = delivery.ClientId,
 				productType = delivery.ProductType,
 				quantityProduct = delivery.QuantityProduct,
+				statusDelivery = delivery?.StatusDelivery.CreateDto(),
+				client = delivery?.Client.CreateDto(),
+				product = delivery?.Product.CreateDto(),
 				deliveriesTruckTips = delivery.DeliveriesTruckTips?.CreateDto(),
 				address = delivery.Address?.CreateDto()
 			};

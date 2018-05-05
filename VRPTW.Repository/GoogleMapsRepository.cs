@@ -27,7 +27,7 @@ namespace VRPTW.Repository
 			DistanceMatrixResponse response = new DistanceMatrixService().GetResponse(request);
 
 			if(response.Status == ServiceResponseStatus.Ok && response.Rows.Length == 1)
-			{
+			{	
 				return response.Rows[0].Elements[0].distance.Value;
 			}
 			else

@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using VRPTW.CrossCutting.Enumerations;
+using System.Collections.Generic;		
 
 namespace VRPTW.Domain.Entity
 {
@@ -13,7 +12,8 @@ namespace VRPTW.Domain.Entity
 		public double QuantityProduct { get; set; }
 		public StatusDelivery StatusDelivery { get; set; }
 		public Address Address { get; set; }
+		public Product Product { get; set; }
 		public List<DeliveryTruckTrip> DeliveriesTruckTips { get; set; }
-		public Client Client;
+		public Client Client { get; set; }
 	}
 }

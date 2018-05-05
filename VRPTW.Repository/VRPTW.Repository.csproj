@@ -68,6 +68,7 @@
     <Compile Include="ProductRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FractionedTripSchedulerRepository.cs" />
+    <Compile Include="VehicleRouteRepository.cs" />
     <Compile Include="VehicleRepository.cs" />
   </ItemGroup>
   <ItemGroup>

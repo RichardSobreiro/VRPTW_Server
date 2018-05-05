@@ -1,5 +1,4 @@
-﻿using System;
-using VRPTW.CrossCutting.Enumerations;
+﻿using System;								 
 
 namespace VRPTW.Domain.Entity
 {

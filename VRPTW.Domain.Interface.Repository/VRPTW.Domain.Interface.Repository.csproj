@@ -51,11 +51,17 @@
     <Compile Include="IDeliveryRepository.cs" />
     <Compile Include="IFractionedTripSchedulerRepository.cs" />
     <Compile Include="IProductRepository.cs" />
+    <Compile Include="IVehicleRouteBusiness.cs" />
+    <Compile Include="IVehicleRouteRepository.cs" />
     <Compile Include="IVehicleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\VRPTW.Domain.Dto\VRPTW.Domain.Dto.csproj">
+      <Project>{443C3604-C849-4F25-9F1C-01DDC51DF10C}</Project>
+      <Name>VRPTW.Domain.Dto</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VRPTW.Domain.Entity\VRPTW.Domain.Entity.csproj">
       <Project>{1C111F9F-055D-4C23-96EA-ACA236A73F6C}</Project>
       <Name>VRPTW.Domain.Entity</Name>

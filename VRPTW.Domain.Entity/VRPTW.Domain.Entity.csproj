@@ -53,7 +53,7 @@
     <Compile Include="Product.cs" />
     <Compile Include="ProductProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Route.cs" />
+    <Compile Include="VehicleRoute.cs" />
     <Compile Include="StatusDelivery.cs" />
     <Compile Include="SubRoute.cs" />
     <Compile Include="UnityMeasurement.cs" />

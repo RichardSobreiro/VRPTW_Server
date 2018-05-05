@@ -1,14 +1,15 @@
 ﻿using System;
-using VRPTW.CrossCutting.Enumerations;
 
 namespace VRPTW.Domain.Entity
 {
 	public class FilterDelivery
 	{
-		public DateTime DateDelivery { get; set; }
-		public int ProductType { get; set; }
+		public DateTime? DateDeliveryInitial { get; set; }
+		public DateTime? DateDeliveryFinal { get; set; }
+		public int? ProductType { get; set; }
 		public string ClientName { get; set; }
-		public double? QuantityProduct { get; set; }
-		public StatusDelivery? StatusDelivery { get; set; }
+		public double? QuantityProductInitial { get; set; }
+		public double? QuantityProductFinal { get; set; }
+		public char? ValueStatus { get; set; }
 	}
 }

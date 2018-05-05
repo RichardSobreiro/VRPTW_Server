@@ -9,11 +9,12 @@ namespace VRPTW.Business.Mapper
 		{
 			return new FilterDelivery()
 			{
-				DateDelivery = dto.dateDelivery,
+				DateDeliveryInitial = dto.desiredDateInitial,
+				DateDeliveryFinal = dto.desiredDateFinal,
 				ClientName = dto.clientName,
 				ProductType = dto.productType,
-				QuantityProduct = dto.quantityProduct,
-				StatusDelivery = dto.statusDelivery
+				QuantityProductInitial = dto.quantityProductInitial,
+				QuantityProductFinal = dto.quantityProductFinal		   
 			};
 		}
 
@@ -21,11 +22,12 @@ namespace VRPTW.Business.Mapper
 		{
 			return new FilterDeliveryDto()
 			{
-				dateDelivery = entity.DateDelivery,
+				desiredDateInitial = entity.DateDeliveryInitial,
 				clientName = entity.ClientName,
 				productType = entity.ProductType,
-				quantityProduct = entity.QuantityProduct,
-				statusDelivery = entity.StatusDelivery
+				quantityProductInitial = entity.QuantityProductInitial,
+				quantityProductFinal = entity.QuantityProductFinal,
+				valueStatus = entity.ValueStatus
 			};
 		}
 	}

@@ -124,6 +124,7 @@
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\DeliveryController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\VehicleRouteController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -141,6 +142,10 @@
     <ProjectReference Include="..\VRPTW.Domain.Interface.Business\VRPTW.Domain.Interface.Business.csproj">
       <Project>{296191B4-52C8-4BFF-B42E-186E7A33921B}</Project>
       <Name>VRPTW.Domain.Interface.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VRPTW.Domain.Interface.Repository\VRPTW.Domain.Interface.Repository.csproj">
+      <Project>{7C738E3C-9E11-435B-AB18-5E499014FA39}</Project>
+      <Name>VRPTW.Domain.Interface.Repository</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

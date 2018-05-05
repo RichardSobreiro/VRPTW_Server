@@ -11,7 +11,7 @@ namespace VRPTW.Repository.CEPLEX
 {
 	public class CeplexRepository : ICeplexRepository
 	{
-		public bool[][] SolveFractionedTrips(CeplexParameters ceplexParameters)
+		public int[][][] SolveFractionedTrips(CeplexParameters ceplexParameters)
 		{
 			CreateDataFile(ceplexParameters);
 			CallSolver();
@@ -79,7 +79,7 @@ namespace VRPTW.Repository.CEPLEX
 					}
 				}
 				writer.WriteLine("];");
-				writer.WriteLine("VehicleCost = 10;");
+				writer.WriteLine("VehicleCost = 100000;");
 			}
 		}
 
@@ -107,24 +107,25 @@ namespace VRPTW.Repository.CEPLEX
 			}
 		}
 
-		private bool[][] GetRoute(CeplexParameters ceplexParameters)
+		private int[][][] GetRoute(CeplexParameters ceplexParameters)
 		{
-			bool[][] routeMatrix = new bool[ceplexParameters.QuantityOfClients + 1][];
+			int[][][] routeMatrix = new int[ceplexParameters.QuantityOfVehiclesAvailable][][];
 			using (var reader = new StreamReader("C:\\Users\\Richard\\Desktop\\Mulprod\\Solution1.txt"))
 			{
 				string solutionText = Task.Run(() => reader.ReadToEndAsync()).Result;
 
-				for(int k = 1; k <= ceplexParameters.QuantityOfVehiclesAvailable; k++)
-				{	
-					for (int j = 1; j <= ceplexParameters.QuantityOfClients+1; j++)
+				for(int k = 0; k < ceplexParameters.QuantityOfVehiclesAvailable; k++)
+				{
+					routeMatrix[k] = new int[ceplexParameters.QuantityOfClients + 1][];
+					for (int j = 0; j < ceplexParameters.QuantityOfClients+1; j++)
 					{
-						routeMatrix[j-1] = new bool[ceplexParameters.QuantityOfClients + 1];
-						for (int i = 1; i <= ceplexParameters.QuantityOfClients+1; i++)
+						routeMatrix[k][j] = new int[ceplexParameters.QuantityOfClients + 1];
+						for (int i = 0; i < ceplexParameters.QuantityOfClients+1; i++)
 						{
-							if(solutionText.Contains("x["+ j + "][" + i + "][" + k + "]"))
-								routeMatrix[j-1][i-1] = true;
+							if (solutionText.Contains("x["+ (k+1) + "][" + (j+1) + "][" + (i+1) + "]"))
+								routeMatrix[k][j][i] = 1;
 							else
-								routeMatrix[j-1][i-1] = false;
+								routeMatrix[k][j][i] = 0;
 						}
 					}
 				}

@@ -12,11 +12,22 @@ namespace VRPTW_Server.API.Controllers
 		[HttpGet]
 		[Route("delivery/deliveries")]
 		[ResponseType(typeof(List<DeliveryDto>))]
-		public IHttpActionResult GetDeliveriesByFilter([FromBody] FilterDeliveryDto filterDeliveryDto)
+		public IHttpActionResult GetDeliveriesByFilter(DateTime? desiredDateInitial = null, DateTime? desiredDateFinal = null,
+			string clientName = null, int? productType = null, char? valueStatus = null, 
+			float? quantityProductInitial = null, float? quantityProductFinal = null)
 		{
 			try
 			{
-				var deliveries = _deliveryBusiness.GetDeliveriesByFilter(filterDeliveryDto);
+				var deliveries = _deliveryBusiness.GetDeliveriesByFilter(new FilterDeliveryDto()
+				{
+					desiredDateInitial = desiredDateInitial,
+					desiredDateFinal = desiredDateFinal,
+					clientName = clientName,
+					productType = productType,
+					valueStatus = valueStatus,
+					quantityProductInitial = quantityProductInitial,
+					quantityProductFinal = quantityProductFinal
+				});
 				return Ok(deliveries);
 			}
 			catch(Exception e)
@@ -40,24 +51,8 @@ namespace VRPTW_Server.API.Controllers
 			}
 		}
 
-		[HttpPost]
-		[Route("scheduledfractioneddelivery")]
-		[ResponseType(typeof(void))]
-		public IHttpActionResult ScheduleFractionedTrip([FromBody] List<DeliveryDto> deliveryTobeScheduled)
-		{
-			try
-			{
-				_deliveryBusiness.ScheduleDeliveries(deliveryTobeScheduled);
-				return Ok();
-			}
-			catch(Exception e)
-			{
-				return InternalServerError(e);
-			}
-		}
-
 		[HttpGet]
-		[Route("statusdeliveries")]
+		[Route("delivery/statusdeliveries")]
 		[ResponseType(typeof(List<StatusDeliveryDto>))]
 		public IHttpActionResult GetStatusDeliveries()
 		{
