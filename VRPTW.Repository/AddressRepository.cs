@@ -38,6 +38,14 @@ namespace VRPTW.Repository
 			}
 		}
 
+		public Address GetAddressByAddressId(int addressId)
+		{
+			using (var connection = OpenConnection())
+			{
+				return connection.QuerySingleOrDefault<Address>(GET_ADDRESS_BY_ADDRESS_ID, new { AddressId = addressId });
+			}
+		}
+
 		private static string INSERT_ADDRESS = @"
 			INSERT INTO ADDRESS (Street, StreetNumber, Neighborhood, City, CountryState, ProductProviderId, ClientId, DepotId)
 			VALUES (@Street, @Number, @Neighborhood, @City, @State, @ProductProviderId, @ClientId, @DepotId)";
@@ -87,5 +95,21 @@ namespace VRPTW.Repository
 				Address
 			WHERE 
 				DepotId = @DepotId";
+
+		private const string GET_ADDRESS_BY_ADDRESS_ID = @"
+			SELECT 
+				AddressId,
+				Street, 
+				StreetNumber AS Number, 
+				Neighborhood, 
+				City, 
+				CountryState AS State, 
+				ProductProviderId, 
+				ClientId, 
+				DepotId
+			FROM 
+				Address
+			WHERE 
+				AddressId = @AddressId";
 	}
 }

@@ -7,6 +7,7 @@ using VRPTW.Domain.Interface.Repository;
 
 namespace VRPTW_Server.API.Controllers
 {
+	[RoutePrefix("vehicleroute")]
 	public class VehicleRouteController : ApiController
     {
 		[HttpPost]
@@ -20,6 +21,28 @@ namespace VRPTW_Server.API.Controllers
 				return Ok();
 			}
 			catch (Exception e)
+			{
+				return InternalServerError(e);
+			}
+		}
+
+		[HttpGet]
+		[Route("vehicleroutes")]
+		[ResponseType(typeof(List<VehicleRouteDto>))]
+		public IHttpActionResult GetVehicleRoutes(DateTime? desiredDateInitial = null, DateTime? desiredDateFinal = null, 
+			int? productType = null)
+		{
+			try
+			{
+				var vehicleRoutes = _vehicleRouteBusiness.GetVehicleRoutes(new VehicleRouteFilterDto()
+				{
+					desiredDateInitial = desiredDateInitial,
+					desiredDateFinal = desiredDateFinal,
+					productType = productType
+				});
+				return Ok(vehicleRoutes);
+			}
+			catch(Exception e)
 			{
 				return InternalServerError(e);
 			}

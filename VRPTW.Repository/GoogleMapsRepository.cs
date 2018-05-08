@@ -1,7 +1,6 @@
 ﻿using Google.Maps;
 using Google.Maps.DistanceMatrix;
 using Google.Maps.Geocoding;
-using System;
 using System.Linq;
 using VRPTW.Domain.Entity;
 using VRPTW.Domain.Interface.Repository;
@@ -10,7 +9,7 @@ namespace VRPTW.Repository
 {
 	public class GoogleMapsRepository : IGoogleMapsRepository
 	{
-		public double? GetDistanceBetweenTwoAddresses(Address addressOrigin, Address addressDestination)
+		public double? GetDistanceBetweenTwoAddresses(Address addressOrigin, Address addressDestination, out long duration)
 		{
 			DistanceMatrixRequest request = new DistanceMatrixRequest();
 
@@ -27,11 +26,13 @@ namespace VRPTW.Repository
 			DistanceMatrixResponse response = new DistanceMatrixService().GetResponse(request);
 
 			if(response.Status == ServiceResponseStatus.Ok && response.Rows.Length == 1)
-			{	
+			{
+				duration = response.Rows[0].Elements[0].duration.Value;
 				return response.Rows[0].Elements[0].distance.Value;
 			}
 			else
 			{
+				duration = 0;
 				return null;
 			}
 		}

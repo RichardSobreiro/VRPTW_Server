@@ -78,7 +78,7 @@ namespace VRPTW.Repository
 			var lookup = new Dictionary<int, Delivery>();	  
 			using (var connection = OpenConnection())
 			{
-				connection.Query<Delivery, Product,Client, StatusDelivery, Delivery>(query, (d, p, c, s) => {
+				connection.Query<Delivery, Product, Client, StatusDelivery, Delivery>(query, (d, p, c, s) => {
 					Delivery delivery;
 					if (!lookup.TryGetValue(d.DeliveryId, out delivery))
 					{

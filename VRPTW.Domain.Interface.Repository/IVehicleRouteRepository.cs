@@ -1,4 +1,5 @@
-﻿using VRPTW.Domain.Entity;
+﻿using System.Collections.Generic;
+using VRPTW.Domain.Entity;
 
 namespace VRPTW.Domain.Interface.Repository
 {
@@ -6,5 +7,6 @@ namespace VRPTW.Domain.Interface.Repository
 	{
 		int InsertVehicleRoute(VehicleRoute vehicleRoute);
 		int InsertSubRoute(SubRoute subRoute);
+		List<VehicleRoute> GetVehicleRoutes(VehicleRouteFilter filter);
 	}
 }

@@ -34,11 +34,11 @@ namespace VRPTW.Repository.CEPLEX
 					{
 						if(i == ceplexParameters.QuantityOfClients)
 						{
-							writer.Write(ceplexParameters.Time[j][i]);
+							writer.Write(ceplexParameters.Distance[j][i]);
 						}
 						else
 						{
-							writer.Write(ceplexParameters.Time[j][i] + ",");
+							writer.Write(ceplexParameters.Distance[j][i] + ",");
 						}
 					}
 					if(j == ceplexParameters.QuantityOfClients)

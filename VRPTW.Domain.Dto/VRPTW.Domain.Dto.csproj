@@ -45,10 +45,15 @@
     <Compile Include="ClientDto.cs" />
     <Compile Include="DeliveryDto.cs" />
     <Compile Include="DeliveryTruckTripDto.cs" />
+    <Compile Include="DepotDto.cs" />
     <Compile Include="FilterDeliveryDto.cs" />
     <Compile Include="ProductDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatusDeliveryDto.cs" />
+    <Compile Include="SubRouteDto.cs" />
+    <Compile Include="VehicleDto.cs" />
+    <Compile Include="VehicleRouteDto.cs" />
+    <Compile Include="VehicleRouteFilterDto.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VRPTW.CrossCutting\VRPTW.CrossCutting.csproj">

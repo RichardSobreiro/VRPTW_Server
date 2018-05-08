@@ -8,5 +8,6 @@ namespace VRPTW.Domain.Interface.Repository
 		void EditAddress(Address address);
 		Address GetAddressByClientId(int clientId);
 		Address GetAddressByDepotId(int depotId);
+		Address GetAddressByAddressId(int addressId);
 	}
 }

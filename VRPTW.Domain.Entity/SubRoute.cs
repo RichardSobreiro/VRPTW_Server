@@ -8,6 +8,8 @@ namespace VRPTW.Domain.Entity
 		public int VehicleRouteId { get; set; }
 		public int AddressOriginId { get; set; }
 		public int AddressDestinyId { get; set; }
+		public Address AddressOrigin { get; set; }
+		public Address AddressDestiny { get; set; }
 		public double Distance { get; set; }
 		public DateTime Duration { get; set; }
 	}

@@ -58,6 +58,7 @@
     <Compile Include="SubRoute.cs" />
     <Compile Include="UnityMeasurement.cs" />
     <Compile Include="Vehicle.cs" />
+    <Compile Include="VehicleRouteFilter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VRPTW.CrossCutting\VRPTW.CrossCutting.csproj">
