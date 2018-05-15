@@ -43,7 +43,7 @@ namespace VRPTW.Repository
 			request.Address = address.FormattedAddress;
 			var response = new GeocodingService().GetResponse(request);
 
-			if (response.Status == ServiceResponseStatus.Ok && response.Results.Count() == 1)
+			if (response.Status == ServiceResponseStatus.Ok && response.Results.Count() >= 1)
 			{
 				var result = response.Results.First();
 

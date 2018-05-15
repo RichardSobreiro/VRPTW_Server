@@ -12,9 +12,10 @@ namespace VRPTW.Business
 	{
 		public int CreateClient(ClientDto clientDto)
 		{
+			var client = clientDto.CreateEntity();
+			_googleMapsRepository.GetLatirudeAndLogitudeOfAnAddress(client.Address);
 			using (var transaction = new TransactionScope())
 			{
-				var client = clientDto.CreateEntity();
 				int clientId = _clientRepository.CreateClient(client);
 				client.Address.ClientId = clientId;
 				_addressRepository.CreateAddres(client.Address);
@@ -53,10 +54,12 @@ namespace VRPTW.Business
 			return clientDto;
 		}
 
-		public ClientBusiness(IClientRepository clientRepository, IAddressRepository addressRepository)
+		public ClientBusiness(IClientRepository clientRepository, IAddressRepository addressRepository,
+			IGoogleMapsRepository googleMapsRepository)
 		{
 			_clientRepository = clientRepository;
 			_addressRepository = addressRepository;
+			_googleMapsRepository = googleMapsRepository;
 		}
 
 		private void FillClientsAddress(List<Client> clients)
@@ -74,5 +77,6 @@ namespace VRPTW.Business
 
 		private readonly IClientRepository _clientRepository;
 		private readonly IAddressRepository _addressRepository;
+		private readonly IGoogleMapsRepository _googleMapsRepository;
 	}
 }

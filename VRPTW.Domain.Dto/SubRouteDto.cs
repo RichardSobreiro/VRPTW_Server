@@ -10,5 +10,6 @@ namespace VRPTW.Domain.Dto
 		public AddressDto addressDestiny { get; set; }
 		public double distance { get; set; }
 		public DateTime duration { get; set; }
+		public int sequenceNumber { get; set; }
 	}
 }

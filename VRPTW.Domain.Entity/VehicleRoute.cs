@@ -12,6 +12,7 @@ namespace VRPTW.Domain.Entity
 		public DateTime? DepartureTime { get; set; }
 		public DateTime? EstimatedTimeReturn { get; set; }
 
+		public int productType { get; set; }
 		public int VehicleId { get; set; }
 		public int DepotId { get; set; }
 		public Depot Depot { get; set; }

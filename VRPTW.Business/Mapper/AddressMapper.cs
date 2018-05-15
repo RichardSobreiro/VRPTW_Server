@@ -17,7 +17,9 @@ namespace VRPTW.Business.Mapper
 				City = addressDto.city,
 				State = addressDto.state,
 				ProductProviderId = addressDto.productProviderId,
-				ClientId = addressDto.clientId	
+				ClientId = addressDto.clientId,
+				Latitude = addressDto.latitude,
+				Longitude = addressDto.longitude
 			};
 		}
 
@@ -32,7 +34,9 @@ namespace VRPTW.Business.Mapper
 				city = address.City,
 				state = address.State,
 				productProviderId = address.ProductProviderId,
-				clientId = address.ClientId
+				clientId = address.ClientId,
+				latitude = address.Latitude,
+				longitude = address.Longitude
 			};
 		}
 

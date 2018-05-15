@@ -14,9 +14,9 @@ namespace VRPTW.Business
 		public List<VehicleRouteDto> GetVehicleRoutes(VehicleRouteFilterDto filter)
 		{
 			var vehicleRoutes = _vehicleRouteRepository.GetVehicleRoutes(filter.CreateEntity());
-			foreach(var vehicleRoute in vehicleRoutes)
+			foreach (var vehicleRoute in vehicleRoutes)
 			{
-				foreach(var subRoute in vehicleRoute.SubRoutes)
+				foreach (var subRoute in vehicleRoute.SubRoutes)
 				{
 					subRoute.AddressOrigin = _addressRepository.GetAddressByAddressId(subRoute.AddressOriginId);
 					subRoute.AddressDestiny = _addressRepository.GetAddressByAddressId(subRoute.AddressDestinyId);
@@ -26,19 +26,20 @@ namespace VRPTW.Business
 		}
 
 		public void ScheduleDeliveries(List<DeliveryDto> deliveriesToBeScheduled)
-		{		
-			if(ValidateSchedulingOfDeliveries(deliveriesToBeScheduled))
+		{
+			if (ValidateSchedulingOfDeliveries(deliveriesToBeScheduled))
 			{
+				ClusterDeliveriesOfTheSameClient(deliveriesToBeScheduled);
 				var deliveriesToBeScheduledEntity = deliveriesToBeScheduled.CreateEntity();
 				var depot = GetBestDepotToAttend(deliveriesToBeScheduled);
 				var routes = ClusterFractionedTrips(depot, deliveriesToBeScheduledEntity);
-				InsertVehicleRoutes(routes, depot);
+				InsertVehicleRoutes(routes, depot, deliveriesToBeScheduled[0].productType);
 			}
 		}
 
 		public bool ValidateSchedulingOfDeliveries(List<DeliveryDto> deliveriesToBeScheduled)
 		{
-			return true;	
+			return true;
 		}
 
 		public Depot GetBestDepotToAttend(List<DeliveryDto> deliveriesToBeScheduled)
@@ -48,7 +49,7 @@ namespace VRPTW.Business
 			return depots[0];
 		}
 
-		public VehicleRouteBusiness(IAddressRepository addressRepository, IDepotRepository depotRepository, 
+		public VehicleRouteBusiness(IAddressRepository addressRepository, IDepotRepository depotRepository,
 			IGoogleMapsRepository googleMapsRepository, ICeplexRepository ceplexRepository,
 			IVehicleRepository vehicleRepository, IVehicleRouteRepository vehicleRouteRepository)
 		{
@@ -136,6 +137,7 @@ namespace VRPTW.Business
 			var ceplexParameters = GetCeplexParameters(depot, fractionedScheduledTrips);
 			int[][][] routeMatrix = _ceplexRepository.SolveFractionedTrips(ceplexParameters);
 			routes = GetRoutesFinded(depot, fractionedScheduledTrips, ceplexParameters, routeMatrix);
+			FindSequenceNumberOfRoutes(routes, ceplexParameters, depot);
 			return routes;
 		}
 
@@ -181,34 +183,46 @@ namespace VRPTW.Business
 				var route = new VehicleRoute();
 				route.DepotId = depot.DepotId;
 				route.DateCreation = DateTime.Now.Date;
-				for (int i = 0; i <= ceplexParameters.QuantityOfClients; i++)
+				route.DateScheduled = DateTime.Now.Date;
+				for(int j = 0; j <= ceplexParameters.QuantityOfClients; j++)
 				{
-					var subRoute = new SubRoute();
-					double distance = 0;
-					long duration = 0;
-					if (i == 0)
+					for (int i = 0; i <= ceplexParameters.QuantityOfClients; i++)
 					{
-						subRoute.AddressOriginId = depot.Adress.AddressId;
-						subRoute.AddressDestinyId = FindAddressIdOfTripInRouteMatrix(k, i,
-							ceplexParameters.QuantityOfClients + 1, routeMatrix, fractionedScheduledTrips,
-							depot, ceplexParameters, out distance, out duration);
-						subRoute.Distance = distance;
-						subRoute.Duration = duration.ConvertMinutesToDateTime();
+						if(routeMatrix[k][j][i] == 1 && j != i && j == 0)
+						{
+							var subRoute = new SubRoute();	
+							subRoute.AddressOriginId = depot.Adress.AddressId;
+							var clientDestiny = fractionedScheduledTrips.FirstOrDefault(c => c.ColumnIndex == i);
+							subRoute.AddressDestinyId = clientDestiny.Address.AddressId;
+							subRoute.Distance = ceplexParameters.Distance[j][i];
+							subRoute.Duration = ceplexParameters.Duration[j][i].ConvertMinutesToDateTime();
+							route.SubRoutes.Add(subRoute);
+						}
+						else if(routeMatrix[k][j][i] == 1 && j != i && j > 0 && i != 0)
+						{
+							var subRoute = new SubRoute();
+							var clientOrigin = fractionedScheduledTrips.FirstOrDefault(c => c.ColumnIndex == j);
+							subRoute.AddressOriginId = clientOrigin.Address.AddressId;
+							var clientDestiny = fractionedScheduledTrips.FirstOrDefault(c => c.ColumnIndex == i);
+							subRoute.AddressDestinyId = clientDestiny.Address.AddressId;
+							subRoute.Distance = ceplexParameters.Distance[j][i];
+							subRoute.Duration = ceplexParameters.Duration[j][i].ConvertMinutesToDateTime();
+							route.SubRoutes.Add(subRoute);
+						}
+						else if (routeMatrix[k][j][i] == 1 && j != i && j > 0 && i == 0)
+						{
+							var subRoute = new SubRoute();
+							var clientOrigin = fractionedScheduledTrips.FirstOrDefault(c => c.ColumnIndex == j);
+							subRoute.AddressOriginId = clientOrigin.Address.AddressId;
+							subRoute.AddressDestinyId = depot.Adress.AddressId;
+							subRoute.Distance = ceplexParameters.Distance[j][i];
+							subRoute.Duration = ceplexParameters.Duration[j][i].ConvertMinutesToDateTime();
+							route.SubRoutes.Add(subRoute);
+						}
 					}
-					else
-					{
-						var fractionedScheduledTrip = fractionedScheduledTrips.FirstOrDefault(trip =>
-							trip.ColumnIndex == i);
-						subRoute.AddressOriginId = fractionedScheduledTrip.Address.AddressId;
-						subRoute.AddressDestinyId = FindAddressIdOfTripInRouteMatrix(k, i,
-							ceplexParameters.QuantityOfClients + 1, routeMatrix, fractionedScheduledTrips,
-							depot, ceplexParameters, out distance, out duration);
-						subRoute.Distance = distance;
-						subRoute.Duration = duration.ConvertMinutesToDateTime();
-					}
-					route.SubRoutes.Add(subRoute);
-				}
-				routes.Add(route);
+				}  
+				if(route.SubRoutes.Count > 0)
+					routes.Add(route);
 			}
 			return routes;
 		}
@@ -275,46 +289,54 @@ namespace VRPTW.Business
 
 			Tuple<double[][],long[][]> DistancesAndDurations = Tuple.Create<double[][],long[][]>(Distance, Duration);
 			return DistancesAndDurations;
-		}
+		}  
 
-		private int FindAddressIdOfTripInRouteMatrix(int vehicleNumber, int originIndex, int numberOfNodes,
-			int[][][] routeMatrix, List<DeliveryTruckTrip> fractionedScheduledTrips, Depot depot, CeplexParameters ceplexParameters,
-			out double distance, out long duration)
+		private void FindSequenceNumberOfRoutes(List<VehicleRoute> routes, CeplexParameters ceplexParameters, Depot depot)
 		{
-			int indexTrip = 0;
-			int i;
-
-			for (i = 0; i < numberOfNodes; i++)
-			{
-				if (routeMatrix[vehicleNumber][originIndex][i] == 1)
+			for(var k = 0; k < routes.Count && routes[k].SubRoutes.Count != 0; k++)
+			{	
+				int indexOfDepot = routes[k].SubRoutes.FindIndex(s => s.AddressOriginId == depot.Adress.AddressId);
+				routes[k].SubRoutes[indexOfDepot].SequenceNumber = 1;
+				int addressIdPreviousDestiny = routes[k].SubRoutes[indexOfDepot].AddressDestinyId;
+				int nextSequenceNumber = 2;
+				while(nextSequenceNumber <= routes[k].SubRoutes.Count)
 				{
-					indexTrip = i;
-					break;
+					var nextIndex = routes[k].SubRoutes.FindIndex(s => s.AddressOriginId == addressIdPreviousDestiny);
+					routes[k].SubRoutes[nextIndex].SequenceNumber = nextSequenceNumber;
+					addressIdPreviousDestiny = routes[k].SubRoutes[nextIndex].AddressDestinyId;
+					nextSequenceNumber++;
 				}
 			}
-			distance = ceplexParameters.Distance[originIndex][(i)];
-			duration = ceplexParameters.Duration[originIndex][(i)];
-			if (i != 0)
-			{
-				var fractionedScheduledTrip = fractionedScheduledTrips.FirstOrDefault(trip => trip.ColumnIndex == indexTrip);
-				return fractionedScheduledTrip.Address.AddressId;
-			}
-			else
-			{
-				return depot.Adress.AddressId;
-			}
 		}
 
-		private void InsertVehicleRoutes(List<VehicleRoute> vehicleRoutes, Depot depot)
+		private void InsertVehicleRoutes(List<VehicleRoute> vehicleRoutes, Depot depot, int productType)
 		{
 			var availableVehicles = _vehicleRepository.GetAvailableVehiclesByDepot(depot.DepotId);
 			foreach (var vehicleRoute in vehicleRoutes)
 			{
+				vehicleRoute.productType = productType;
+				vehicleRoute.VehicleId = availableVehicles[0].VehicleId;
 				vehicleRoute.VehicleRouteId = _vehicleRouteRepository.InsertVehicleRoute(vehicleRoute);
 				foreach (var subRoute in vehicleRoute.SubRoutes)
 				{
 					subRoute.VehicleRouteId = vehicleRoute.VehicleRouteId;
 					_vehicleRouteRepository.InsertSubRoute(subRoute);
+				}
+			}
+		}
+
+		private void ClusterDeliveriesOfTheSameClient(List<DeliveryDto> deliveriesToBeScheduled)
+		{
+			for(var i = 0; i < deliveriesToBeScheduled.Count; i++)
+			{
+				if(deliveriesToBeScheduled.Count(d => d.client.clientId == deliveriesToBeScheduled[i].client.clientId) > 1)
+				{
+					deliveriesToBeScheduled[i].quantityProduct = deliveriesToBeScheduled
+						.FindAll(d => d.client.clientId == deliveriesToBeScheduled[i].client.clientId)
+						.Sum(dSameClient => dSameClient.quantityProduct);
+					deliveriesToBeScheduled.RemoveAll(d => 
+						d.client.clientId == deliveriesToBeScheduled[i].client.clientId && 
+						d.deliveryId != deliveriesToBeScheduled[i].deliveryId);
 				}
 			}
 		}

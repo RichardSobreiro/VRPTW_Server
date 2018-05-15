@@ -47,8 +47,10 @@ namespace VRPTW.Repository
 		}
 
 		private static string INSERT_ADDRESS = @"
-			INSERT INTO ADDRESS (Street, StreetNumber, Neighborhood, City, CountryState, ProductProviderId, ClientId, DepotId)
-			VALUES (@Street, @Number, @Neighborhood, @City, @State, @ProductProviderId, @ClientId, @DepotId)";
+			INSERT INTO ADDRESS (Street, StreetNumber, Neighborhood, City, CountryState, ProductProviderId, 
+				ClientId, DepotId, Latitude, Longitude)
+			VALUES (@Street, @Number, @Neighborhood, @City, @State, @ProductProviderId, 
+				@ClientId, @DepotId, @Latitude, @Longitude)";
 
 		private static string EDIT_CLIENT_ADDRESS = @"
 			UPDATE Client
@@ -60,7 +62,9 @@ namespace VRPTW.Repository
 				State = @State, 
 				ProductProviderId = @ProductProviderId, 
 				ClientId = @ClientId, 
-				DepotId = @DepotId
+				DepotId = @DepotId,
+				Latitude = @Latitude, 
+				Longitude = @Longitude
 			WHERE 
 				AddressId = @AddressId";
 
@@ -74,7 +78,9 @@ namespace VRPTW.Repository
 				CountryState AS State, 
 				ProductProviderId, 
 				ClientId, 
-				DepotId
+				DepotId,
+				Latitude, 
+				Longitude
 			FROM 
 				Address
 			WHERE 
@@ -90,7 +96,9 @@ namespace VRPTW.Repository
 				CountryState AS State, 
 				ProductProviderId, 
 				ClientId, 
-				DepotId
+				DepotId,
+				Latitude, 
+				Longitude
 			FROM 
 				Address
 			WHERE 
@@ -106,7 +114,9 @@ namespace VRPTW.Repository
 				CountryState AS State, 
 				ProductProviderId, 
 				ClientId, 
-				DepotId
+				DepotId,
+				Latitude, 
+				Longitude
 			FROM 
 				Address
 			WHERE 

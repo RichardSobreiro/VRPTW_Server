@@ -51,6 +51,7 @@ namespace VRPTW.Repository
 						VehicleRoute vehicleRoute;
 						if(!lookup.TryGetValue(vr.VehicleRouteId, out vehicleRoute))
 						{
+							vehicleRoute = vr;
 							vehicleRoute.SubRoutes = new List<SubRoute>();
 							lookup.Add(vr.VehicleRouteId, vehicleRoute = vr);
 						}						
@@ -78,30 +79,34 @@ namespace VRPTW.Repository
 				DateScheduled,
 				DepartureTime,
 				EstimatedTimeReturn,
+				ProductType,
 				VehicleId,
 				DepotId)
 			VALUES (
-				@DateCreation,
-				@DateScheduled,
+				GETDATE(),
+				GETDATE(),
 				@DepartureTime,
 				@EstimatedTimeReturn,
+				@ProductType,
 				@VehicleId,
 				@DepotId)
 			SELECT SCOPE_IDENTITY()";
 
 		private const string INSERT_SUB_ROUTE = @"
-			INSERT INTO SubRoute
-				VehicleRouteId
-				AddressOriginId
-				AddressDestinyId
-				Distance
-				Duration
-			VALUES
+			INSERT INTO SubRoute(
 				VehicleRouteId,
 				AddressOriginId,
 				AddressDestinyId,
 				Distance,
-				Duration
+				Duration,
+				SequenceNumber)
+			VALUES(
+				@VehicleRouteId,
+				@AddressOriginId,
+				@AddressDestinyId,
+				@Distance,
+				@Duration,
+				@SequenceNumber)
 			SELECT SCOPE_IDENTITY()";
 
 		private const string GET_VEHICLE_ROUTES = @"
@@ -124,12 +129,14 @@ namespace VRPTW.Repository
 				sr.AddressOriginId,
 				sr.AddressDestinyId,
 				sr.Distance,
-				sr.Duration
+				sr.Duration,
+				sr.SequenceNumber
 			FROM 
 				VehicleRoute vr
 				INNER JOIN Depot d ON d.DepotId = vr.DepotId
 				INNER JOIN SubRoute sr ON sr.VehicleRouteId = vr.VehicleRouteId
 			WHERE 
-				@MIN <= vr.DateCreation AND @MAX >= vr.DateCreation {0}";
+				@MIN <= vr.DateCreation AND @MAX >= vr.DateCreation {0}
+			ORDER BY SequenceNumber";
 	}
 }

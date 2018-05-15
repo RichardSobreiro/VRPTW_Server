@@ -17,5 +17,7 @@
 				return street + ", " + number + "," + neighborhood + " - " + city + " - " + state;
 			}
 		}
+		public double? latitude { get; set; }
+		public double? longitude { get; set; }
 	}
 }

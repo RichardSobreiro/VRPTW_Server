@@ -15,7 +15,8 @@ namespace VRPTW.Business.Mapper
 				addressOrigin = entity.AddressOrigin.CreateDto(),
 				addressDestiny = entity.AddressDestiny.CreateDto(),
 				distance = entity.Distance,
-				duration = entity.Duration
+				duration = entity.Duration,
+				sequenceNumber = entity.SequenceNumber
 			};
 		}
 
