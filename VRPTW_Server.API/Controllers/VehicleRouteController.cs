@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Web.Http;
 using System.Web.Http.Description;
 using VRPTW.Domain.Dto;
@@ -29,15 +30,14 @@ namespace VRPTW_Server.API.Controllers
 		[HttpGet]
 		[Route("vehicleroutes")]
 		[ResponseType(typeof(List<VehicleRouteDto>))]
-		public IHttpActionResult GetVehicleRoutes(DateTime? desiredDateInitial = null, DateTime? desiredDateFinal = null, 
-			int? productType = null)
+		public IHttpActionResult GetVehicleRoutes(string desiredDateInitial, string desiredDateFinal, int? productType = null)
 		{
 			try
 			{
 				var vehicleRoutes = _vehicleRouteBusiness.GetVehicleRoutes(new VehicleRouteFilterDto()
 				{
-					desiredDateInitial = desiredDateInitial,
-					desiredDateFinal = desiredDateFinal,
+					desiredDateInitial = DateTime.Parse(desiredDateInitial),
+					desiredDateFinal = DateTime.Parse(desiredDateFinal).AddHours(23).AddMinutes(59).AddSeconds(59),
 					productType = productType
 				});
 				return Ok(vehicleRoutes);

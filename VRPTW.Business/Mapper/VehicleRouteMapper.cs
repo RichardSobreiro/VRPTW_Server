@@ -12,6 +12,7 @@ namespace VRPTW.Business.Mapper
 			{
 				vehicleRouteId = entity.VehicleRouteId,
 				dateCreation = entity.DateCreation,
+				dateScheduled = entity.DateScheduled,
 				departureTime = entity.DepartureTime,
 				estimatedTimeReturn = entity.EstimatedTimeReturn,
 				vehicleId = entity.VehicleId,

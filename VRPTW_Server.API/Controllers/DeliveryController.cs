@@ -20,8 +20,8 @@ namespace VRPTW_Server.API.Controllers
 			{
 				var deliveries = _deliveryBusiness.GetDeliveriesByFilter(new FilterDeliveryDto()
 				{
-					desiredDateInitial = desiredDateInitial,
-					desiredDateFinal = desiredDateFinal,
+					desiredDateInitial = desiredDateInitial.HasValue ? desiredDateInitial.Value : DateTime.Now.Date,
+					desiredDateFinal = desiredDateFinal.HasValue ? desiredDateFinal.Value : DateTime.Now.Date,
 					clientName = clientName,
 					productType = productType,
 					valueStatus = valueStatus,

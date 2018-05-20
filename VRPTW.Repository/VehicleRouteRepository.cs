@@ -83,8 +83,8 @@ namespace VRPTW.Repository
 				VehicleId,
 				DepotId)
 			VALUES (
-				GETDATE(),
-				GETDATE(),
+				@DateCreation,
+				@DateScheduled,
 				@DepartureTime,
 				@EstimatedTimeReturn,
 				@ProductType,

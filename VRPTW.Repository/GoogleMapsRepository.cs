@@ -1,7 +1,9 @@
 ﻿using Google.Maps;
 using Google.Maps.DistanceMatrix;
 using Google.Maps.Geocoding;
+using System;
 using System.Linq;
+using VRPTW.CrossCutting.Cache;
 using VRPTW.Domain.Entity;
 using VRPTW.Domain.Interface.Repository;
 
@@ -9,7 +11,13 @@ namespace VRPTW.Repository
 {
 	public class GoogleMapsRepository : IGoogleMapsRepository
 	{
-		public double? GetDistanceBetweenTwoAddresses(Address addressOrigin, Address addressDestination, out long duration)
+		public Tuple<double?, long> GetDistanceBetweenTwoAddressesWithCache(Address addressOrigin, Address addressDestination)
+		{
+			return Cache.GetItemFromCache("Distance_" + addressOrigin.AddressId + "_" + addressDestination.AddressId,
+				GetDistanceBetweenTwoAddresses, addressOrigin, addressDestination);
+		}
+
+		private Tuple<double?, long> GetDistanceBetweenTwoAddresses(Address addressOrigin, Address addressDestination)
 		{
 			DistanceMatrixRequest request = new DistanceMatrixRequest();
 
@@ -25,16 +33,15 @@ namespace VRPTW.Repository
 			
 			DistanceMatrixResponse response = new DistanceMatrixService().GetResponse(request);
 
-			if(response.Status == ServiceResponseStatus.Ok && response.Rows.Length == 1)
+			long duration = 0;
+			double? distance = null;
+			if (response.Status == ServiceResponseStatus.Ok && response.Rows.Length == 1)
 			{
 				duration = response.Rows[0].Elements[0].duration.Value;
-				return response.Rows[0].Elements[0].distance.Value;
+				distance = response.Rows[0].Elements[0].distance.Value;
+				return Tuple.Create(distance, duration);
 			}
-			else
-			{
-				duration = 0;
-				return null;
-			}
+			return Tuple.Create(distance, duration);
 		}
 
 		public void GetLatirudeAndLogitudeOfAnAddress(Address address)

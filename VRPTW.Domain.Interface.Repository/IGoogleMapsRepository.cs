@@ -1,10 +1,11 @@
-﻿using VRPTW.Domain.Entity;
+﻿using System;
+using VRPTW.Domain.Entity;
 
 namespace VRPTW.Domain.Interface.Repository
 {
 	public interface IGoogleMapsRepository
 	{
-		double? GetDistanceBetweenTwoAddresses(Address addressOrigin, Address addressDestination, out long duration);
+		Tuple<double?, long> GetDistanceBetweenTwoAddressesWithCache(Address addressOrigin, Address addressDestination);
 		void GetLatirudeAndLogitudeOfAnAddress(Address address);
 	}
 }
