@@ -100,6 +100,19 @@ namespace VRPTW.Repository.CEPLEX
 				writer.Flush();
 
 				writer.WriteLine("QuantityOfClients = " + ceplexParameters.QuantityOfClients + ";");
+				writer.Write("ClientsDemand = [0,");
+				for (int i = 0; i < ceplexParameters.QuantityOfClients; i++)
+				{
+					if (i == (ceplexParameters.QuantityOfClients - 1))
+					{
+						writer.Write(ceplexParameters.ClientsDemand[i]);
+					}
+					else
+					{
+						writer.Write(ceplexParameters.ClientsDemand[i] + ",");
+					}
+				}
+				writer.WriteLine("];");
 				writer.WriteLine("Distance = [");
 				for (int j = 0; j < (ceplexParameters.QuantityOfClients + 1); j++)
 				{

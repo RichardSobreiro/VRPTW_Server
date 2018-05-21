@@ -57,6 +57,10 @@ namespace VRPTW.Repository
 				address.Longitude = result.Geometry.Location.Longitude;
 				address.Latitude = result.Geometry.Location.Latitude;
 			}
+			else if(response.Status == ServiceResponseStatus.OverQueryLimit)
+			{
+				Console.WriteLine("Excesso de requisições no dia!");
+			}
 			else
 			{
 				address.Longitude = null;

@@ -195,10 +195,16 @@ namespace VRPTW.Business
 		{
 			var ceplexParametersVRP = new CeplexParameters();
 			ceplexParametersVRP.QuantityOfClients = vehicleRoute.SubRoutes.Count - 1;
+
+			ceplexParametersVRP.ClientsDemand = new double[ceplexParametersVRP.QuantityOfClients];
+			for (int i = 0; i < ceplexParametersVRP.QuantityOfClients; i++)
+			{
+				ceplexParametersVRP.ClientsDemand[i] = vehicleRoute.SubRoutes[(i+1)].DemandOrigin;
+			}
+
 			ceplexParametersVRP.Distance = new double[vehicleRoute.SubRoutes.Count][];
 			ceplexParametersVRP.Duration = new long[vehicleRoute.SubRoutes.Count][];
 			vehicleRoute.SubRoutes = vehicleRoute.SubRoutes.OrderBy(s => s.SequenceNumber).ToList();
-
 			for (int i = 0; i < vehicleRoute.SubRoutes.Count; i++)
 			{
 				ceplexParametersVRP.Distance[i] = new double[vehicleRoute.SubRoutes.Count];
@@ -248,7 +254,9 @@ namespace VRPTW.Business
 						{
 							var subRoute = new SubRoute();	
 							subRoute.AddressOriginId = depot.Address.AddressId;
+							subRoute.DemandOrigin = 0;
 							var clientDestiny = fractionedScheduledTrips.FirstOrDefault(c => c.ColumnIndex == i);
+							subRoute.DemandDestiny = clientDestiny.QuantityProduct;
 							subRoute.AddressDestinyId = clientDestiny.Address.AddressId;
 							subRoute.Distance = ceplexParameters.Distance[j][i];
 							subRoute.Duration = ceplexParameters.Duration[j][i].ConvertMinutesToDateTime();
@@ -260,8 +268,10 @@ namespace VRPTW.Business
 						{
 							var subRoute = new SubRoute();
 							var clientOrigin = fractionedScheduledTrips.FirstOrDefault(c => c.ColumnIndex == j);
+							subRoute.DemandOrigin = clientOrigin.QuantityProduct;
 							subRoute.AddressOriginId = clientOrigin.Address.AddressId;
 							var clientDestiny = fractionedScheduledTrips.FirstOrDefault(c => c.ColumnIndex == i);
+							subRoute.DemandDestiny = clientDestiny.QuantityProduct;
 							subRoute.AddressDestinyId = clientDestiny.Address.AddressId;
 							subRoute.Distance = ceplexParameters.Distance[j][i];
 							subRoute.Duration = ceplexParameters.Duration[j][i].ConvertMinutesToDateTime();
@@ -273,7 +283,9 @@ namespace VRPTW.Business
 						{
 							var subRoute = new SubRoute();
 							var clientOrigin = fractionedScheduledTrips.FirstOrDefault(c => c.ColumnIndex == j);
+							subRoute.DemandOrigin = clientOrigin.QuantityProduct;
 							subRoute.AddressOriginId = clientOrigin.Address.AddressId;
+							subRoute.DemandDestiny = 0;
 							subRoute.AddressDestinyId = depot.Address.AddressId;
 							subRoute.Distance = ceplexParameters.Distance[j][i];
 							subRoute.Duration = ceplexParameters.Duration[j][i].ConvertMinutesToDateTime();
