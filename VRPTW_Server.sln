@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Apresentacao", "1 - Apresentacao", "{9D5E6A6B-A3E3-43B9-836F-C6947C4210AF}"
 EndProject
@@ -32,6 +32,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VRPTW.CrossCutting", "VRPTW.CrossCutting\VRPTW.CrossCutting.csproj", "{E23C4D2D-E89C-4C40-9DE0-A1F88D1D1729}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VRPTW_Server.API", "VRPTW_Server.API\VRPTW_Server.API.csproj", "{110745E8-6004-46CA-8499-6977998C0408}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "7 - DataBase", "7 - DataBase", "{CAB9844D-CAC7-4FA9-B6A8-DAD2155A7E52}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DatabaseVehicleRoutingProblem", "DatabaseVehicleRoutingProblem\DatabaseVehicleRoutingProblem.sqlproj", "{1A16227F-FB49-437D-8270-51761473E036}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ceplex", "Ceplex\Ceplex.csproj", "{89615007-CA12-4E69-B582-CA5962CCC1EC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "8 - Solver", "8 - Solver", "{EE8003C7-FDCC-436F-9F4F-3B68C0075CAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +83,16 @@ Global
 		{110745E8-6004-46CA-8499-6977998C0408}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{110745E8-6004-46CA-8499-6977998C0408}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{110745E8-6004-46CA-8499-6977998C0408}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A16227F-FB49-437D-8270-51761473E036}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A16227F-FB49-437D-8270-51761473E036}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A16227F-FB49-437D-8270-51761473E036}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{1A16227F-FB49-437D-8270-51761473E036}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A16227F-FB49-437D-8270-51761473E036}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A16227F-FB49-437D-8270-51761473E036}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{89615007-CA12-4E69-B582-CA5962CCC1EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89615007-CA12-4E69-B582-CA5962CCC1EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89615007-CA12-4E69-B582-CA5962CCC1EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89615007-CA12-4E69-B582-CA5962CCC1EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,5 +107,10 @@ Global
 		{97760DBD-A579-42BE-A3D2-851484743006} = {C9AC0BF0-CACB-492C-B517-849F8A223A57}
 		{E23C4D2D-E89C-4C40-9DE0-A1F88D1D1729} = {8F3C608A-DD77-4AD4-B728-63B5BB0C7718}
 		{110745E8-6004-46CA-8499-6977998C0408} = {9D5E6A6B-A3E3-43B9-836F-C6947C4210AF}
+		{1A16227F-FB49-437D-8270-51761473E036} = {CAB9844D-CAC7-4FA9-B6A8-DAD2155A7E52}
+		{89615007-CA12-4E69-B582-CA5962CCC1EC} = {EE8003C7-FDCC-436F-9F4F-3B68C0075CAE}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FF34F2FD-F2CA-4853-AD30-BB041D0D4A67}
 	EndGlobalSection
 EndGlobal

@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using VRPTW.CrossCutting.Configuration;
 using VRPTW.CrossCutting.Enumerations;
@@ -30,7 +29,7 @@ namespace VRPTW.Repository.CEPLEX
 
 		private void CreateDataFileMultipleVehicleRoutingProblem(CeplexParameters ceplexParameters)
 		{
-			using (var writer = new StreamWriter("C:\\Users\\Richard\\Desktop\\Mulprod\\Modelo3.dat"))
+			using (var writer = new StreamWriter(ConfigurationManager.AppSettings["DATA_FILE_MULTIPLE_VEHICLE_ROUTING_PROBLEM"]))
 			{
 				writer.Flush();
 
@@ -95,7 +94,7 @@ namespace VRPTW.Repository.CEPLEX
 
 		private void CreateDataFileVehicleRoutingProblem(CeplexParameters ceplexParameters)
 		{
-			using (var writer = new StreamWriter("C:\\Users\\Richard\\Desktop\\Mulprod\\VRP.dat"))
+			using (var writer = new StreamWriter(ConfigurationManager.AppSettings["DATA_FILE_VEHICLE_ROUTING_PROBLEM"]))
 			{
 				writer.Flush();
 
@@ -148,7 +147,7 @@ namespace VRPTW.Repository.CEPLEX
 			startInfo.CreateNoWindow = true;
 			startInfo.UseShellExecute = false;
 			startInfo.Arguments = ((int)problem).ToString();
-			startInfo.FileName = "C:\\Users\\Richard\\Desktop\\Mulprod\\bin\\Debug\\Mulprod.exe";
+			startInfo.FileName = ConfigurationManager.AppSettings["SOLVER_PATH"];
 			startInfo.WindowStyle = ProcessWindowStyle.Hidden;
 			var stopwatch = new Stopwatch();
 
@@ -179,7 +178,7 @@ namespace VRPTW.Repository.CEPLEX
 		private int[][][] GetRouteMultipleVehicleRoutingProblem(CeplexParameters ceplexParameters)
 		{
 			int[][][] routeMatrix = new int[ceplexParameters.QuantityOfVehiclesAvailable][][];
-			using (var reader = new StreamReader("C:\\Users\\Richard\\Desktop\\Mulprod\\Solution1.txt"))
+			using (var reader = new StreamReader(ConfigurationManager.AppSettings["SOLUTION_MULTIPLE_VEHICLE_ROUTING_PROBLEM"]))
 			{
 				string solutionText = Task.Run(() => reader.ReadToEndAsync()).Result;
 
@@ -205,7 +204,7 @@ namespace VRPTW.Repository.CEPLEX
 		private int[] GetRouteVehicleRoutingProblem(CeplexParameters ceplexParameters)
 		{
 			int[] sequenceVector = new int[ceplexParameters.QuantityOfClients + 1];
-			using (var reader = new StreamReader("C:\\Users\\Richard\\Desktop\\Mulprod\\SolutionVRP.txt"))
+			using (var reader = new StreamReader(ConfigurationManager.AppSettings["SOLUTION_VEHICLE_ROUTING_PROBLEM"]))
 			{
 				string solutionText = Task.Run(() => reader.ReadToEndAsync()).Result;
 				int j = 0;
