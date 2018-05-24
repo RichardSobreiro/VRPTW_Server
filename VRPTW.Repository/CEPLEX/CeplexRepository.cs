@@ -190,7 +190,7 @@ namespace VRPTW.Repository.CEPLEX
 						routeMatrix[k][j] = new int[ceplexParameters.QuantityOfClients + 1];
 						for (int i = 0; i < ceplexParameters.QuantityOfClients+1; i++)
 						{
-							if (solutionText.Contains("x["+ (k+1) + "][" + (j+1) + "][" + (i+1) + "]"))
+							if (solutionText.Contains("x["+ (i+1) + "][" + (j+1) + "][" + (k+1) + "]"))
 								routeMatrix[k][j][i] = 1;
 							else
 								routeMatrix[k][j][i] = 0;

@@ -41,6 +41,10 @@ namespace VRPTW.Repository
 				distance = response.Rows[0].Elements[0].distance.Value;
 				return Tuple.Create(distance, duration);
 			}
+			else if (response.Status == ServiceResponseStatus.OverQueryLimit)
+			{
+				Console.WriteLine("Excesso de requisições no dia!");
+			}
 			return Tuple.Create(distance, duration);
 		}
 

@@ -87,8 +87,8 @@ subject to{
 	}
 }
 
-/*execute {
-	var f = new IloOplOutputFile("C:\\Users\\Richard\\Desktop\\Mulprod\\Solution1.txt");
+execute {
+	var f = new IloOplOutputFile("C:\\Users\\Richard Sobreiro\\Desktop\\PFCCodigos\\Backend\\VRPTW_Server\\Ceplex\\SolutionMVRP.txt");
 
 	for(var k in Vehicles) {
 		for(var j in Locations){
@@ -101,9 +101,9 @@ subject to{
 		}
 	}
 	f.close();
-}*/
+}
 
-execute {
+/*execute {
 	for(var k in Vehicles){
 		for(var i in Locations) {
 			if(x[i][j][k] == 1) {
@@ -122,4 +122,4 @@ execute {
 			}			
 		}
 	}
-}
+}*/

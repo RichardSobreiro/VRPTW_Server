@@ -33,17 +33,17 @@ subject to{
 	}
 }
 
-/*execute {
-	var f = new IloOplOutputFile("C:\\Users\\Richard\\Desktop\\Mulprod\\SolutionVRP.txt");
+execute {
+	var f = new IloOplOutputFile("C:\\Users\\Richard Sobreiro\\Desktop\\PFCCodigos\\Backend\\VRPTW_Server\\Ceplex\\SolutionTSP.txt");
 
 	for(var i in Locations) {
 		f.writeln(v[i]);		
 	}
 		
 	f.close();
-}*/
+}
 
-execute {
+/*execute {
 	for(var i in Locations) {
 		writeln("Ponto ",i,": ",v[i]);		
 	}
@@ -55,4 +55,4 @@ execute {
 			}	
 		}			
 	}
-}
+}*/
