@@ -15,7 +15,5 @@ namespace VRPTW.Domain.Entity
 		public double Distance { get; set; }
 		public DateTime Duration { get; set; }
 		public int SequenceNumber { get; set; }
-
-		public int indexVRPDistanceMatrix { get; set; }
 	}
 }

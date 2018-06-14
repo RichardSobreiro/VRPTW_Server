@@ -42,5 +42,18 @@ namespace VRPTW.CrossCutting.Configuration
 				return 5;
 			}
 		}
+
+		public static bool USE_VRP_FOR_SECOND_FASE_OPTIMIZATION
+		{
+			get
+			{
+				bool use = false;
+				if(bool.TryParse(ConfigurationManager.AppSettings["USE_VRP_FOR_SECOND_FASE_OPTIMIZATION"], out use))
+				{
+					return use;
+				}
+				return false;
+			}
+		}
 	}
 }

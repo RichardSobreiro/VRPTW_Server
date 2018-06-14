@@ -19,7 +19,7 @@ namespace VRPTW.Repository.CEPLEX
 			return GetRouteMultipleVehicleRoutingProblem(ceplexParameters);
 		}
 
-		public int[] FindOptimalSequenceForSubRoutes(CeplexParameters ceplexParameters)
+		public int[][] FindOptimalSequenceForSubRoutes(CeplexParameters ceplexParameters)
 		{
 			bool optimalSolution;
 			CreateDataFileVehicleRoutingProblem(ceplexParameters);
@@ -99,6 +99,7 @@ namespace VRPTW.Repository.CEPLEX
 				writer.Flush();
 
 				writer.WriteLine("QuantityOfClients = " + ceplexParameters.QuantityOfClients + ";");
+				double wtot = 0;
 				writer.Write("ClientsDemand = [0,");
 				for (int i = 0; i < ceplexParameters.QuantityOfClients; i++)
 				{
@@ -110,8 +111,10 @@ namespace VRPTW.Repository.CEPLEX
 					{
 						writer.Write(ceplexParameters.ClientsDemand[i] + ",");
 					}
+					wtot += ceplexParameters.ClientsDemand[i];
 				}
 				writer.WriteLine("];");
+				writer.WriteLine("wtot = " + wtot + ";");
 				writer.WriteLine("Distance = [");
 				for (int j = 0; j < (ceplexParameters.QuantityOfClients + 1); j++)
 				{
@@ -201,29 +204,26 @@ namespace VRPTW.Repository.CEPLEX
 			return routeMatrix;
 		}
 
-		private int[] GetRouteVehicleRoutingProblem(CeplexParameters ceplexParameters)
+		private int[][] GetRouteVehicleRoutingProblem(CeplexParameters ceplexParameters)
 		{
-			int[] sequenceVector = new int[ceplexParameters.QuantityOfClients + 1];
+			int[][] routeMatrix = new int[ceplexParameters.QuantityOfClients + 1][];
 			using (var reader = new StreamReader(ConfigurationManager.AppSettings["SOLUTION_VEHICLE_ROUTING_PROBLEM"]))
 			{
 				string solutionText = Task.Run(() => reader.ReadToEndAsync()).Result;
-				int j = 0;
-				for (int i = 0; i < ceplexParameters.QuantityOfClients + 1; i++)
+																						
+				for (int j = 0; j < ceplexParameters.QuantityOfClients + 1; j++)
 				{
-					int nextValue = 0;
-					bool valueFinded = false;
-					while (!valueFinded && j < solutionText.Length)
+					routeMatrix[j] = new int[ceplexParameters.QuantityOfClients + 1];
+					for (int i = 0; i <= ceplexParameters.QuantityOfClients + 1; i++)
 					{
-						if (int.TryParse(solutionText[j].ToString(), out nextValue))
-						{
-							valueFinded = true;
-						}
-						j++;
+						if (solutionText.Contains("x[" + (j + 1) + "][" + (i + 1) + "]"))
+							routeMatrix[j][i%5] = 1;
+						else
+							routeMatrix[j][i%5] = 0;
 					}
-					sequenceVector[i] = nextValue;
 				}
 			}
-			return sequenceVector;
+			return routeMatrix;
 		}
 	}											  
 }

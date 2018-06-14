@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using VRPTW.Business.Mapper;
+using VRPTW.CrossCutting.Configuration;
 using VRPTW.CrossCutting.Extensions;
 using VRPTW.Domain.Dto;
 using VRPTW.Domain.Entity;
@@ -33,7 +34,7 @@ namespace VRPTW.Business
 				var deliveriesToBeScheduledEntity = deliveriesToBeScheduled.CreateEntity();
 				var depot = GetBestDepotToAttend(deliveriesToBeScheduled);
 				var routes = ClusterFractionedTrips(depot, deliveriesToBeScheduledEntity);
-				//InsertVehicleRoutes(routes, depot, deliveriesToBeScheduled[0].productType);
+				InsertVehicleRoutes(routes, depot, deliveriesToBeScheduled[0].productType);
 			}
 		}
 
@@ -61,8 +62,7 @@ namespace VRPTW.Business
 			_vehicleRouteRepository = vehicleRouteRepository;
 		}
 
-		private List<VehicleRoute> ClusterFractionedTrips(Depot depot,
-			List<Delivery> deliveriesTobeScheduled)
+		private List<VehicleRoute> ClusterFractionedTrips(Depot depot, List<Delivery> deliveriesTobeScheduled)
 		{
 			var fractionedScheduledTrips = new List<DeliveryTruckTrip>();
 			bool optimalSolution = false;
@@ -73,10 +73,9 @@ namespace VRPTW.Business
 				fractionedScheduledTrips.AddRange(deliveryTruckTrips);
 			}						 
 			var vehicleRoutes = FindRoutes(depot, fractionedScheduledTrips, out optimalSolution);
-			if (!optimalSolution)
-			{
-				PostProcessSubRoutes(depot, vehicleRoutes);
-			}	
+
+			PostProcessSubRoutes(depot, vehicleRoutes, fractionedScheduledTrips);
+
 			return vehicleRoutes;
 		}
 
@@ -90,14 +89,96 @@ namespace VRPTW.Business
 			return routes;
 		}
 		
-		private void PostProcessSubRoutes(Depot depot, List<VehicleRoute> vehicleRoutes)
+		private void PostProcessSubRoutes(Depot depot, List<VehicleRoute> vehicleRoutes, List<DeliveryTruckTrip> fractionedScheduledTrips)
 		{
 			foreach(var vehicleRoute in vehicleRoutes)
 			{
 				var ceplexParameters = GetCeplexParametersVehicleRoutingProblem(depot, vehicleRoute);
-				int[] sequenceVector = _ceplexRepository.FindOptimalSequenceForSubRoutes(ceplexParameters);
-				GetOptimalSequenceOfClientsToVisit(depot, vehicleRoute, sequenceVector);
+				var addresses = GetAddressesOfVehicleRoute(vehicleRoute);
+				if (GeneralConfigurations.USE_VRP_FOR_SECOND_FASE_OPTIMIZATION)
+				{
+					int[][] routeMatrix = _ceplexRepository.FindOptimalSequenceForSubRoutes(ceplexParameters);
+					GetOptimalSequenceOfClientsToVisit(depot, vehicleRoute, routeMatrix, ceplexParameters, addresses);
+				}
+				else
+				{
+					PostProcessWithMinimumPathAlgorithm(depot, vehicleRoute, ceplexParameters, addresses);
+				}
+				FindSequenceNumberOfSubRoutes(vehicleRoute, depot);
 			}
+		}
+
+		private void PostProcessWithMinimumPathAlgorithm(Depot depot, VehicleRoute vehicleRoute, CeplexParameters ceplexParameters,
+			List<Address> addresses)
+		{
+			vehicleRoute.SubRoutes = new List<SubRoute>();
+			int i = 0;
+			int indexOrigin = 0;
+			int indexDestiny = 0;
+			List<int> indexesAlreadyVisited = new List<int>();
+			indexesAlreadyVisited.Add(0);
+			while (i <= ceplexParameters.QuantityOfClients)
+			{
+				if (i == 0)
+				{
+					var subRoute = new SubRoute();
+					subRoute.AddressOriginId = depot.Address.AddressId;
+					indexDestiny = GetIndexNearestAddress(i, ceplexParameters, addresses, indexesAlreadyVisited);
+					var addressDestiny = addresses.FirstOrDefault(a => a.indexVRPDistanceMatrix == indexDestiny);
+					subRoute.AddressDestinyId = addressDestiny.AddressId;
+					subRoute.Distance = ceplexParameters.Distance[0][addressDestiny.indexVRPDistanceMatrix];
+					subRoute.Duration = ceplexParameters.Duration[0][addressDestiny.indexVRPDistanceMatrix].ConvertMinutesToDateTime();
+					subRoute.AddressOrigin = depot.Address;
+					subRoute.AddressDestiny = addressDestiny;
+					vehicleRoute.SubRoutes.Add(subRoute);
+				}
+				else if(i == ceplexParameters.QuantityOfClients)
+				{
+					var subRoute = new SubRoute();
+					var addressOrigin = addresses.FirstOrDefault(a => a.indexVRPDistanceMatrix == indexOrigin);
+					subRoute.AddressOriginId = addressOrigin.AddressId;													   
+					subRoute.AddressDestinyId = depot.Address.AddressId;
+					subRoute.Distance = ceplexParameters.Distance[indexOrigin][0];
+					subRoute.Duration = ceplexParameters.Duration[indexOrigin][0].ConvertMinutesToDateTime();
+					subRoute.AddressOrigin = addressOrigin;
+					subRoute.AddressDestiny = depot.Address;
+					vehicleRoute.SubRoutes.Add(subRoute);
+				}
+				else
+				{
+					var subRoute = new SubRoute();
+					var addressOrigin = addresses.FirstOrDefault(a => a.indexVRPDistanceMatrix == indexOrigin);
+					subRoute.AddressOriginId = addressOrigin.AddressId;
+					indexDestiny = GetIndexNearestAddress(indexOrigin, ceplexParameters, addresses, indexesAlreadyVisited);
+					var addressDestiny = addresses.FirstOrDefault(a => a.indexVRPDistanceMatrix == indexDestiny);
+					subRoute.AddressDestinyId = addressDestiny.AddressId;
+					subRoute.Distance = ceplexParameters.Distance[indexOrigin][addressDestiny.indexVRPDistanceMatrix];
+					subRoute.Duration = ceplexParameters.Duration[indexOrigin][addressDestiny.indexVRPDistanceMatrix].ConvertMinutesToDateTime();
+					subRoute.AddressOrigin = addressOrigin;
+					subRoute.AddressDestiny = addressDestiny;
+					vehicleRoute.SubRoutes.Add(subRoute);
+				}
+				indexesAlreadyVisited.Add(indexDestiny);
+				indexOrigin = indexDestiny;
+				i++;
+			}
+		}
+
+		private int GetIndexNearestAddress(int indexOrigin, CeplexParameters ceplexParameters,
+			List<Address> addresses, List<int> indexesAlreadyVisited)
+		{
+			int indexDestiny = 0;
+			double smallestDistance = double.MaxValue;			
+			for(int i = 0; i <= ceplexParameters.QuantityOfClients; i++)
+			{
+				if(i != indexOrigin && !indexesAlreadyVisited.Any(index => index == i) && 
+					smallestDistance > ceplexParameters.Distance[indexOrigin][i])
+				{
+					smallestDistance = ceplexParameters.Distance[indexOrigin][i];
+					indexDestiny = i;
+				}
+			}
+			return indexDestiny;
 		}
 
 		private List<DeliveryTruckTrip> AllocateQuantityOfProductToTruckTrips(Delivery delivery)
@@ -208,28 +289,33 @@ namespace VRPTW.Business
 			for (int i = 0; i < vehicleRoute.SubRoutes.Count; i++)
 			{
 				ceplexParametersVRP.Distance[i] = new double[vehicleRoute.SubRoutes.Count];
+				ceplexParametersVRP.Duration[i] = new long[vehicleRoute.SubRoutes.Count];
 				for (int j = 0; j < vehicleRoute.SubRoutes.Count; j++)
 				{	
-					vehicleRoute.SubRoutes[i].indexVRPDistanceMatrix = i;
+					vehicleRoute.SubRoutes[i].AddressOrigin.indexVRPDistanceMatrix = i;
 					if (i == 0 && i != j)
 					{
 						var tupleDistanceDuration = _googleMapsRepository.GetDistanceBetweenTwoAddressesWithCache(depot.Address,
 							vehicleRoute.SubRoutes[j].AddressOrigin);
 						ceplexParametersVRP.Distance[i][j] = tupleDistanceDuration.Item1.Value;
+						ceplexParametersVRP.Duration[i][j] = tupleDistanceDuration.Item2;
 					}
 					else if (i != 0 && i < j && i != j)
 					{
 						var tupleDistanceDuration = _googleMapsRepository.GetDistanceBetweenTwoAddressesWithCache(
 							vehicleRoute.SubRoutes[i].AddressOrigin, vehicleRoute.SubRoutes[j].AddressDestiny);
 						ceplexParametersVRP.Distance[i][j] = tupleDistanceDuration.Item1.Value;
+						ceplexParametersVRP.Duration[i][j] = tupleDistanceDuration.Item2;
 					}
 					else if (i != 0 && i > j && i != j)
 					{
 						ceplexParametersVRP.Distance[i][j] = ceplexParametersVRP.Distance[j][i];
+						ceplexParametersVRP.Duration[i][j] = ceplexParametersVRP.Duration[j][i];
 					}
 					else 
 					{
 						ceplexParametersVRP.Distance[i][j] = 0;
+						ceplexParametersVRP.Duration[i][j] = 0;
 					}	 	
 				}
 			}
@@ -299,19 +385,72 @@ namespace VRPTW.Business
 					routes.Add(route);
 			}
 			return routes;
+		}		 
+
+		public void GetOptimalSequenceOfClientsToVisit(Depot depot, VehicleRoute vehicleRoute, int[][] routeMatrix, CeplexParameters ceplexParameters,
+			List<Address> addresses)
+		{
+			vehicleRoute.SubRoutes = new List<SubRoute>();
+			int sequenceNumber = 1;
+			for (int j = 0; j <= ceplexParameters.QuantityOfClients; j++)
+			{
+				for (int i = 0; i <= ceplexParameters.QuantityOfClients; i++)
+				{
+					if (routeMatrix[j][i] == 1 && j != i && j == 0)
+					{
+						var subRoute = new SubRoute();
+						subRoute.AddressOriginId = depot.Address.AddressId;
+						var addressDestiny = addresses.FirstOrDefault(a => a.indexVRPDistanceMatrix == i);							
+						subRoute.AddressDestinyId = addressDestiny.AddressId;
+						subRoute.Distance = ceplexParameters.Distance[j][i];
+						subRoute.Duration = ceplexParameters.Duration[j][i].ConvertMinutesToDateTime();
+						subRoute.AddressOrigin = depot.Address;
+						subRoute.AddressDestiny = addressDestiny;
+						subRoute.SequenceNumber = sequenceNumber;
+						sequenceNumber++;
+						vehicleRoute.SubRoutes.Add(subRoute);
+					}
+					else if (routeMatrix[j][i] == 1 && j != i && j > 0 && i != 0)
+					{
+						var subRoute = new SubRoute();
+						var addressOrigin = addresses.FirstOrDefault(c => c.indexVRPDistanceMatrix == j);
+						subRoute.AddressOriginId = addressOrigin.AddressId;
+						var addressDestiny = addresses.FirstOrDefault(c => c.indexVRPDistanceMatrix == i);
+						subRoute.AddressDestinyId = addressDestiny.AddressId;
+						subRoute.Distance = ceplexParameters.Distance[j][i];
+						subRoute.Duration = ceplexParameters.Duration[j][i].ConvertMinutesToDateTime();
+						subRoute.AddressOrigin = addressOrigin;
+						subRoute.AddressDestiny = addressDestiny;
+						subRoute.SequenceNumber = sequenceNumber;
+						sequenceNumber++;
+						vehicleRoute.SubRoutes.Add(subRoute);
+					}
+					else if (routeMatrix[j][i] == 1 && j != i && j > 0 && i == 0)
+					{
+						var subRoute = new SubRoute();
+						var addressOrigin = addresses.FirstOrDefault(c => c.indexVRPDistanceMatrix == j);
+						subRoute.AddressOriginId = addressOrigin.AddressId;
+						subRoute.AddressDestinyId = depot.Address.AddressId;
+						subRoute.Distance = ceplexParameters.Distance[j][i];
+						subRoute.Duration = ceplexParameters.Duration[j][i].ConvertMinutesToDateTime();
+						subRoute.AddressOrigin = addressOrigin;
+						subRoute.AddressDestiny = depot.Address;
+						subRoute.SequenceNumber = sequenceNumber;
+						sequenceNumber++;
+						vehicleRoute.SubRoutes.Add(subRoute);
+					}
+				}
+			}
 		}
 
-		private void GetOptimalSequenceOfClientsToVisit(Depot depot, VehicleRoute vehicleRoute, int[] sequenceVector)
+		private List<Address> GetAddressesOfVehicleRoute(VehicleRoute vehicleRoute)
 		{
-			var depotSubRoute = vehicleRoute.SubRoutes.FirstOrDefault(s => s.AddressOriginId == depot.Address.AddressId);
-			depotSubRoute.SequenceNumber = sequenceVector[0] - sequenceVector[0];
-			int i = 1;
-			while (i < sequenceVector.Length)
+			List<Address> addresses = new List<Address>();
+			for(int i = 0; i < vehicleRoute.SubRoutes.Count; i++)
 			{
-				var nextSubRoute = vehicleRoute.SubRoutes.FirstOrDefault(s => s.indexVRPDistanceMatrix == i);
-				nextSubRoute.SequenceNumber = sequenceVector[i];
-				i++;
+				addresses.Add(vehicleRoute.SubRoutes[i].AddressOrigin);
 			}
+			return addresses;
 		}
 
 		private Tuple<double[][], long[][]> GetDistancesAndDurations(Depot depot, List<DeliveryTruckTrip> fractionedScheduledTrips,
